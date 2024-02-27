@@ -1,24 +1,6 @@
-from flask import Flask
-from flask import request, render_template, redirect, url_for, flash, session
-from flask_mysqldb import MySQL
-from flask_bcrypt import Bcrypt
-from services import logServices
-
-app = Flask(__name__)
-
-# Required
-app.config['MYSQL_HOST'] = 'localhost'
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "--"
-app.config["MYSQL_DB"] = "JobApplications"
-# Extra configs, optional:
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'  # This enables dictionary cursor
-
-app.secret_key = 'd#*$&^' 
-
-mysql = MySQL(app)
-bcrypt = Bcrypt(app)
-
+from flask import request, redirect, render_template, session, url_for
+from app import app, mysql, bcrypt
+from app.logger import log
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -34,10 +16,10 @@ def register():
             cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
             mysql.connection.commit()
             cur.close()            
-            logServices.log(op, "Registered successfully")
+            log(op, "Registered successfully")
             return redirect(url_for('login')) # login route
         except Exception as e:
-            logServices.log(op, e)
+            log(op, e)
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -56,7 +38,7 @@ def login():
                     # Password is correct
                     session['logged_in'] = True
                     session['username'] = user_details['username']
-                    logServices.log(op, "Logged in successfully")
+                    log(op, "Logged in successfully")
                     return redirect(url_for('dashboard'))
                 else:
                     # Password is wrong
@@ -64,19 +46,5 @@ def login():
             else:
                 raise Exception("User not found")
         except Exception as e:
-            logServices.log(op, e)
+            log(op, e)
     return render_template('login.html')
-
-
-@app.route('/dashboard')
-def dashboard():
-
-    if session.get('logged_in'):
-        return render_template('dashboard.html', username=session.get('username'))
-    else:
-        flash('Please log in to access the dashboard')
-        return redirect(url_for('login'))
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
