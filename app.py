@@ -1,8 +1,7 @@
 from flask import Flask
-from flask import request, render_template, redirect, url_for, flash
+from flask import request, render_template, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
-
 
 app = Flask(__name__)
 
@@ -14,26 +13,23 @@ app.config["MYSQL_DB"] = "JobApplications"
 # Extra configs, optional:
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'  # This enables dictionary cursor
 
-mysql = MySQL(app)
+app.secret_key = 'd#*$&^' 
 
-@app.route("/")
-def users():
-    cur = mysql.connection.cursor()
-    cur.execute("""SELECT user, host FROM mysql.user""")
-    rv = cur.fetchall()
-    return str(rv)
+
+mysql = MySQL(app)
+bcrypt = Bcrypt(app)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         userDetails = request.form
-        #username = userDetails['username']
+        username = userDetails['username']
         email = userDetails['email']
-        password = userDetails['password']  # TODO: hash this
-        lastName = userDetails['lastName']
-        firstName = userDetails['firstName']
+        password = userDetails['password']
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO Users(email, password, lastName, firstName) VALUES(%s, %s, %s, %s)",(email, password, lastName, firstName))
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
         mysql.connection.commit()
         cur.close()
         flash('Registration successful!')
@@ -44,16 +40,30 @@ def register():
 def login():
     if request.method == 'POST':
         userDetails = request.form
-        email = userDetails['email']
-        password = userDetails['password']  # TODO: hash this
+        username = userDetails['username']
+        password = userDetails['password']
         cur = mysql.connection.cursor()
-        result = cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", [email, password])
+        result = cur.execute("SELECT * FROM Users WHERE username = %s", [username])
         if result > 0:
-            # User exists and password is correct
-            return redirect(url_for('dashboard'))  # Redirect to a protected dashboard
-        else:
-            flash('Invalid login credentials')
+            user_details = cur.fetchone()
+            if bcrypt.check_password_hash(user_details['password'], password):
+                # Password is correct
+                session['logged_in'] = True
+                session['username'] = user_details['username']
+                return redirect(url_for('dashboard'))
+            else:
+                # Password is wrong
+                flash('Invalid login credentials')
     return render_template('login.html')
+
+
+@app.route('/dashboard')
+def dashboard():
+    if session.get('logged_in'):
+        return render_template('dashboard.html', email=session.get('email'))
+    else:
+        flash('Please log in to access the dashboard')
+        return redirect(url_for('login'))
 
 
 if __name__ == "__main__":
