@@ -1,0 +1,2 @@
+# JobApplicationRecorder
+MySQL, Flask, python
