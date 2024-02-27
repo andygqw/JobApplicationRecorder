@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request, render_template, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
+from services import logServices
 
 app = Flask(__name__)
 
@@ -15,52 +16,63 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'  # This enables dictionary cursor
 
 app.secret_key = 'd#*$&^' 
 
-
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    op = "Register"
     if request.method == 'POST':
-        userDetails = request.form
-        username = userDetails['username']
-        email = userDetails['email']
-        password = userDetails['password']
-        cur = mysql.connection.cursor()
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
-        mysql.connection.commit()
-        cur.close()
-        flash('Registration successful!')
-        return redirect(url_for('login')) # login route
+        try:
+            userDetails = request.form
+            username = userDetails['username']
+            email = userDetails['email']
+            password = userDetails['password']
+            cur = mysql.connection.cursor()
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+            cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
+            mysql.connection.commit()
+            cur.close()            
+            logServices.log(op, "Registered successfully")
+            return redirect(url_for('login')) # login route
+        except Exception as e:
+            logServices.log(op, e)
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    op = "Login"
     if request.method == 'POST':
-        userDetails = request.form
-        username = userDetails['username']
-        password = userDetails['password']
-        cur = mysql.connection.cursor()
-        result = cur.execute("SELECT * FROM Users WHERE username = %s", [username])
-        if result > 0:
-            user_details = cur.fetchone()
-            if bcrypt.check_password_hash(user_details['password'], password):
-                # Password is correct
-                session['logged_in'] = True
-                session['username'] = user_details['username']
-                return redirect(url_for('dashboard'))
+        try:
+            userDetails = request.form
+            username = userDetails['username']
+            password = userDetails['password']
+            cur = mysql.connection.cursor()
+            result = cur.execute("SELECT * FROM Users WHERE username = %s", [username])
+            if result > 0:
+                user_details = cur.fetchone()
+                if bcrypt.check_password_hash(user_details['password'], password):
+                    # Password is correct
+                    session['logged_in'] = True
+                    session['username'] = user_details['username']
+                    logServices.log(op, "Logged in successfully")
+                    return redirect(url_for('dashboard'))
+                else:
+                    # Password is wrong
+                    raise Exception("Wrong password")
             else:
-                # Password is wrong
-                flash('Invalid login credentials')
+                raise Exception("User not found")
+        except Exception as e:
+            logServices.log(op, e)
     return render_template('login.html')
 
 
 @app.route('/dashboard')
 def dashboard():
+
     if session.get('logged_in'):
-        return render_template('dashboard.html', email=session.get('email'))
+        return render_template('dashboard.html', username=session.get('username'))
     else:
         flash('Please log in to access the dashboard')
         return redirect(url_for('login'))
