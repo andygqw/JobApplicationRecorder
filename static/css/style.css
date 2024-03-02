@@ -130,7 +130,7 @@ button:hover {
     width: auto;
     transform: translate(-50%, -50%);
     background-color: #f4f4f4;
-    padding: 20px;
+    padding: 40px;
     z-index: 3;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
  }
