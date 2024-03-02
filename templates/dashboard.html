@@ -108,11 +108,11 @@
                 <label for="editResumeVersion">Resume Version:</label>
                 <input type="text" id="editResumeVersion" name="resume_version"><br>
 
-                <label for="editDescription">Description:</label>
+                <!-- <label for="editDescription">Description:</label>
                 <textarea type="text" id="editDescription" name="job_description"><br>
 
                 <label for="editNotes">Notes:</label>
-                <textarea type="text" id="editNotes" name="notes"><br>
+                <textarea type="text" id="editNotes" name="notes"><br> -->
     
                 <input type="hidden" id="editId" name="id">
                 <input type="submit">Save Changes</input>
@@ -151,10 +151,10 @@
             document.getElementById("editApplyDate").value = job.applicationDate;
             document.getElementById("editExpireDate").value = job.applicationDeadline;
             document.getElementById("editStatus").value = job.status;
-            document.getElementById("editJobUrl").value = jobjobUrl;
+            document.getElementById("editJobUrl").value = job.jobUrl;
             document.getElementById("editResumeVersion").value = job.resumeVersion;
-            document.getElementById("editdescription").value = job.jobDescription;
-            document.getElementById("editNotes").value = job.notes;
+            // document.getElementById("editDescription").value = job.jobDescription;
+            // document.getElementById("editNotes").value = job.notes;
 
             document.getElementById("jobModal").style.display = "block";
         }
