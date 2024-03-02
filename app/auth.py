@@ -55,5 +55,11 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.clear()
-    return redirect(url_for('home'))
+    try:
+        name = session['username']
+        session.clear()
+        log("Logout", name, "Logged out successfully")
+        return redirect(url_for('home'))
+    except Exception as e:
+        log("Logout", "FailedLogoutHolder", e)
+        return redirect(url_for('home'))
