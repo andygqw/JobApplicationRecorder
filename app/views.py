@@ -23,14 +23,28 @@ def edit_job():
         try:
             userDetails = request.form
             cur = mysql.connection.cursor()
-            cur.execute("UPDATE JobApplication SET job_title = %s, company_name = %s, job_description = %s, job_location = %s, job_url = %s, application_deadline_date = %s, application_date = %s, resume_version = %s, status = %s, notes = %s WHERE id = %s", 
-                        (userDetails['job_title'], userDetails['company_name'], userDetails['job_description'], userDetails['job_location'], userDetails['job_url'], userDetails['application_deadline_date'], userDetails['application_date'], userDetails['resume_version'], userDetails['status'], userDetails['notes'], userDetails['id']))
+
+            s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'] + "', "
+            s += "company_name = '" + userDetails['company_name'] + "', "
+            s += "job_description = '" + userDetails['job_description'] + "', "
+            s += "job_location = '" + userDetails['job_location'] + "', "
+            s += "job_url = '" + userDetails['job_url'] + "', "
+            s += "application_deadline_date = '" + str(userDetails['application_deadline_date']) + "', "
+            s += "application_date = '" + str(userDetails['application_date']) + "', "
+            s += "resume_version = '" + userDetails['resume_version'] + "', "
+            s += "status = '" + userDetails['status'] + "', "
+            s += "notes = '" + userDetails['notes'] + "' "
+            s += "WHERE id = " + userDetails['id'] + ";"
+            cur.execute(s)
+
+            #cur.execute("UPDATE JobApplications SET job_title = %s, company_name = %s, job_description = %s, job_location = %s, job_url = %s, application_deadline_date = %s, application_date = %s, resume_version = %s, status = %s, notes = %s WHERE id = %s", 
+            #            (userDetails['job_title'], userDetails['company_name'], userDetails['job_description'], userDetails['job_location'], userDetails['job_url'], userDetails['application_deadline_date'], userDetails['application_date'], userDetails['resume_version'], userDetails['status'], userDetails['notes'], userDetails['id']))
             mysql.connection.commit()
             cur.close()
             log(op, session['username'], "Job edited successfully")
             return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "Failed to edit job", str(e))
+            log(op, "FailedEditJobHolder", str(e) + " " + s)
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))

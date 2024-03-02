@@ -94,7 +94,7 @@
                 <input type="text" id="editLocation" name="job_location"><br>
                 
                 <label for="editApplyDate">Date Applied:</label>
-                <input type="date" id="editApplyDate" name="application_ate"><br>
+                <input type="date" id="editApplyDate" name="application_date"><br>
 
                 <label for="editExpireDate">Location:</label>
                 <input type="date" id="editExpireDate" name="application_deadline_date"><br>
@@ -115,7 +115,7 @@
                 <textarea id="editNotes" name="notes"></textarea><br>
     
                 <input type="hidden" id="editId" name="id">
-                <input type="submit">Save Changes</input>
+                <input type="submit"></input>
             </form>
         </div>
     </div>
@@ -155,6 +155,7 @@
             document.getElementById("editResumeVersion").value = job.resumeVersion;
             document.getElementById("editDescription").value = job.jobDescription;
             document.getElementById("editNotes").value = job.notes;
+            document.getElementById("editId").value = job.id;
 
             document.getElementById("jobModal").style.display = "block";
         }
