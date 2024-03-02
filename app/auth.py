@@ -22,7 +22,7 @@ def register():
             log(op, username,"Registered successfully")
             return redirect(url_for('login')) # login route
         except Exception as e:
-            log(op, "FailedRegisterHolder" ,e)
+            log(op, "FailedRegisterHolder" , str(e))
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -50,7 +50,7 @@ def login():
             else:
                 raise Exception("User not found")
         except Exception as e:
-            log(op, "FailedLoginHolder", e)
+            log(op, "FailedLoginHolder", str(e))
     return render_template('login.html')
 
 @app.route('/logout')
@@ -61,5 +61,5 @@ def logout():
         log("Logout", name, "Logged out successfully")
         return redirect(url_for('home'))
     except Exception as e:
-        log("Logout", "FailedLogoutHolder", e)
+        log("Logout", "FailedLogoutHolder", str(e))
         return redirect(url_for('home'))

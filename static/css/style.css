@@ -82,21 +82,60 @@ button:hover {
 .jobs-table th, .jobs-table td {
     border: 1px solid #0a0909;
     text-align: left;
-    padding: 8px;
+}
+
+.jobs-table td:hover {
+    cursor:grab;
 }
 
 /* Define specific widths for each column */
-.jobs-table th:nth-child(1), .jobs-table td:nth-child(1) { width: 10%; } /* Company */
-.jobs-table th:nth-child(2), .jobs-table td:nth-child(2) { width: 10%; } /* Position */
-.jobs-table th:nth-child(3), .jobs-table td:nth-child(3) { width: 10%; } /* Location */
+.jobs-table th:nth-child(1), .jobs-table td:nth-child(1) { width: 15%; } /* Company */
+.jobs-table th:nth-child(2), .jobs-table td:nth-child(2) { width: 15%; } /* Position */
+.jobs-table th:nth-child(3), .jobs-table td:nth-child(3) { width: 15%; } /* Location */
 .jobs-table th:nth-child(4), .jobs-table td:nth-child(4) { width: 15%; } /* Date Applied */
 .jobs-table th:nth-child(5), .jobs-table td:nth-child(5) { width: 15%; } /* Date Expire */
-.jobs-table th:nth-child(6), .jobs-table td:nth-child(6) { width: 5%; } /* Resume Version */
-.jobs-table th:nth-child(7), .jobs-table td:nth-child(6) { width: 5%; } /* Status */
-.jobs-table th:nth-child(8), .jobs-table td:nth-child(6) { width: 5%; } /* Job Link */
-.jobs-table th:nth-child(9), .jobs-table td:nth-child(6) { width: 25%; } /* Notes */
+.jobs-table th:nth-child(6), .jobs-table td:nth-child(6) { width: 15%; } /* Status */
+.jobs-table th:nth-child(7), .jobs-table td:nth-child(7) { width: 10%; } /* Job Link */
 
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+ }
 
+ .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    transform: translate(-50%, -50%);
+    background-color: #f4f4f4;
+    padding: 20px;
+    z-index: 3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+
+ .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+    align-self: flex-end;
+    z-index: 4;
+    position: relative;
+ }
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: grab;
+}
 
 footer {
     border-top: #333;
