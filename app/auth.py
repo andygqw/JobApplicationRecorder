@@ -12,6 +12,9 @@ def register():
             email = userDetails['email']
             password = userDetails['password']
             cur = mysql.connection.cursor()
+            result = cur.execute("SELECT * FROM Users WHERE username = %s", [username])
+            if(result > 0):
+                raise Exception("Username already exists")
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
             mysql.connection.commit()
