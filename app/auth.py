@@ -1,6 +1,7 @@
 from flask import request, redirect, render_template, session, url_for
 from app import app, mysql, bcrypt
 from app.logger import log
+from datetime import datetime
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -16,7 +17,7 @@ def register():
             if(result > 0):
                 raise Exception("Username already exists")
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-            cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
+            cur.execute("INSERT INTO Users(username, email, password, registration_date) VALUES(%s, %s, %s, %s)",(username, email, hashed_password, datetime.now()))
             mysql.connection.commit()
             cur.close()            
             log(op, username,"Registered successfully")
