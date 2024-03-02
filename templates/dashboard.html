@@ -25,12 +25,61 @@
                 <h5 class="card-title">User Information</h5>
                 <p class="card-text">Manage your information, update your profile, and more.</p>
                 <a href="#" class="btn btn-primary">Edit Profile</a>
+                <a href="/logout" class="btn btn-danger">Log Out</a>
             </div>
         </div>
-        <!-- Add more sections as needed -->
-        <div class="logout">
-            <a href="/logout" class="btn btn-danger">Log Out</a>
-        </div>
+        <section class="card mt-4 p-4">
+            <!-- Add Job Form -->
+            <!-- <form method="post" class="add-job-form">
+                <h2>Add New Job</h2>
+                <input type="hidden" name="operation" value="add_job"> -->
+                <!-- Input fields for job details -->
+                <!-- <button type="submit">Add Job</button>
+            </form> -->
+
+            <!-- List of Jobs -->
+            <h2>Your Jobs</h2>
+            <table class="jobs-table">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Location</th>
+                        <th>Date Applied</th>
+                        <th>Date Expire</th>
+                        <th>Resume Version</th>
+                        <th>Status</th>
+                        <th>Job Link</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{ job.company_name }}</td>
+                        <td>{{ job.job_title }}</td>
+                        <td>{{ job.job_location }}</td>
+                        <td>{{ job.application_date }}</td>
+                        <td>{{ job.application_deadline }}</td>
+                        <td>{{ job.resume_version }}</td>
+                        <td>{{ job.status }}</td>
+                        <td>{{ job.url }}</td>
+                        <td>{{ job.notes }}</td>
+                        <!-- <td> -->
+                            <!-- Inline Edit Form for each job -->
+                            <!-- <form method="post" class="edit-job-form">
+                                <input type="hidden" name="operation" value="edit_job">
+                                <input type="hidden" name="job_id" value="{{ job.id }}">
+                                Add other fields as necessary -->
+                                <!-- <button type="submit">Update</button>
+                            </form>
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

@@ -26,7 +26,7 @@ main {
 }
 
 .welcome-section{
-    padding-top: 70px;
+    padding-top: 50px;
     font-weight: bolder;
     text-align: center;
 }
@@ -72,6 +72,31 @@ button {
 button:hover {
     background: #0056b3;
 }
+
+.jobs-table {
+    width: 100%; 
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.jobs-table th, .jobs-table td {
+    border: 1px solid #0a0909;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Define specific widths for each column */
+.jobs-table th:nth-child(1), .jobs-table td:nth-child(1) { width: 10%; } /* Company */
+.jobs-table th:nth-child(2), .jobs-table td:nth-child(2) { width: 10%; } /* Position */
+.jobs-table th:nth-child(3), .jobs-table td:nth-child(3) { width: 10%; } /* Location */
+.jobs-table th:nth-child(4), .jobs-table td:nth-child(4) { width: 15%; } /* Date Applied */
+.jobs-table th:nth-child(5), .jobs-table td:nth-child(5) { width: 15%; } /* Date Expire */
+.jobs-table th:nth-child(6), .jobs-table td:nth-child(6) { width: 5%; } /* Resume Version */
+.jobs-table th:nth-child(7), .jobs-table td:nth-child(6) { width: 5%; } /* Status */
+.jobs-table th:nth-child(8), .jobs-table td:nth-child(6) { width: 5%; } /* Job Link */
+.jobs-table th:nth-child(9), .jobs-table td:nth-child(6) { width: 25%; } /* Notes */
+
+
 
 footer {
     border-top: #333;

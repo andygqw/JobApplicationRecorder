@@ -41,6 +41,7 @@ def login():
                     # Password is correct
                     session['logged_in'] = True
                     session['username'] = user_details['username']
+                    session['user_id'] = user_details['id']
                     log(op, session['username'],"Logged in successfully")
                     return redirect(url_for('dashboard'))
                 else:
