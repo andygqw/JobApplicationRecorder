@@ -37,11 +37,9 @@ def edit_job():
             s += "WHERE id = " + userDetails['id'] + ";"
             cur.execute(s)
 
-            #cur.execute("UPDATE JobApplications SET job_title = %s, company_name = %s, job_description = %s, job_location = %s, job_url = %s, application_deadline_date = %s, application_date = %s, resume_version = %s, status = %s, notes = %s WHERE id = %s", 
-            #            (userDetails['job_title'], userDetails['company_name'], userDetails['job_description'], userDetails['job_location'], userDetails['job_url'], userDetails['application_deadline_date'], userDetails['application_date'], userDetails['resume_version'], userDetails['status'], userDetails['notes'], userDetails['id']))
             mysql.connection.commit()
             cur.close()
-            log(op, session['username'], "Job edited successfully")
+            log(op, session['username'], "Job edited successfully " + s)
             return redirect(url_for('dashboard'))
         except Exception as e:
             log(op, "FailedEditJobHolder", str(e) + " " + s)

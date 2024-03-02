@@ -59,7 +59,7 @@
                             data-job-title="{{ job.job_title }}"
                             data-job-location="{{ job.job_location }}"
                             data-application-date="{{ job.application_date }}"
-                            data-application-deadline="{{ job.application_deadline }}"
+                            data-application-deadline="{{ job.application_deadline_date }}"
                             data-status="{{ job.status }}"
                             data-job-url="{{ job.job_url }}"
                             data-resume-version="{{ job.resume_version }}"
@@ -69,7 +69,7 @@
                             <td>{{ job.job_title }}</td>
                             <td>{{ job.job_location }}</td>
                             <td>{{ job.application_date }}</td>
-                            <td>{{ job.application_deadline }}</td>
+                            <td>{{ job.application_deadline_date }}</td>
                             <td>{{ job.status }}</td>
                             <td><a href="{{ job.job_url }}">click here</a></td>
                         </tr>
@@ -96,7 +96,7 @@
                 <label for="editApplyDate">Date Applied:</label>
                 <input type="date" id="editApplyDate" name="application_date"><br>
 
-                <label for="editExpireDate">Location:</label>
+                <label for="editExpireDate">Date Expire:</label>
                 <input type="date" id="editExpireDate" name="application_deadline_date"><br>
 
                 <label for="editStatus">Status:</label>
