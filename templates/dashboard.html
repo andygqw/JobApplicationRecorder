@@ -49,23 +49,30 @@
                         <th>Date Expire</th>
                         <th>Status</th>
                         <th>Job Link</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for job in jobs %}
-                    <tr>
-                        <td>{{ job.company_name }}</td>
-                        <td>{{ job.job_title }}</td>
-                        <td>{{ job.job_location }}</td>
-                        <td>{{ job.application_date }}</td>
-                        <td>{{ job.application_deadline }}</td>
-                        <td>{{ job.status }}</td>
-                        <td>{{ job.job_url }}</td>
-                        <td type="hidden" name="resumeVersion" value="{{ job.resume_version }}"></td>
-                        <td type="hidden" name="description" value="{{ job.job_description}}"></td>
-                        <td type="hidden" name="notes" value="{{ job.notes }}"></td>
-                        <td type="hidden" name="id" value="{{ job.id }}"></td>
-                    </tr>
+                        <tr data-id="{{ job.id }}"
+                            data-company-name="{{ job.company_name }}"
+                            data-job-title="{{ job.job_title }}"
+                            data-job-location="{{ job.job_location }}"
+                            data-application-date="{{ job.application_date }}"
+                            data-application-deadline="{{ job.application_deadline }}"
+                            data-status="{{ job.status }}"
+                            data-job-url="{{ job.job_url }}"
+                            data-resume-version="{{ job.resume_version }}"
+                            data-job-description="{{ job.job_description | escape }}"
+                            data-notes="{{ job.notes | escape }}">
+                            <td>{{ job.company_name }}</td>
+                            <td>{{ job.job_title }}</td>
+                            <td>{{ job.job_location }}</td>
+                            <td>{{ job.application_date }}</td>
+                            <td>{{ job.application_deadline }}</td>
+                            <td>{{ job.status }}</td>
+                            <td><a href="{{ job.job_url }}">click here</a></td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -119,26 +126,36 @@
             var rows = document.querySelectorAll(".jobs-table tbody tr");
             rows.forEach(row => {
                 row.addEventListener("click", function() {
-                    showDetails(this);
+                    showDetails({
+                        id: this.getAttribute('data-id'),
+                        companyName: this.getAttribute('data-company-name'),
+                        jobTitle: this.getAttribute('data-job-title'),
+                        jobLocation: this.getAttribute('data-job-location'),
+                        applicationDate: this.getAttribute('data-application-date'),
+                        applicationDeadline: this.getAttribute('data-application-deadline'),
+                        status: this.getAttribute('data-status'),
+                        jobUrl: this.getAttribute('data-job-url'),
+                        resumeVersion: this.getAttribute('data-resume-version'),
+                        jobDescription: this.getAttribute('data-job-description'),
+                        notes: this.getAttribute('data-notes')
+                    });
                 });
             });
         });
 
-
-        function showDetails(row) {
+        function showDetails(job) {
             
-            document.getElementById("editCompany").value = row.cells[0].innerText;
-            document.getElementById("editJobTitle").value = row.cells[1].innerText;
-            document.getElementById("editLocation").value = row.cells[2].innerText;
-            document.getElementById("editApplyDate").value = row.cells[3].innerText;
-            document.getElementById("editExpireDate").value = row.cells[4].innerText;
-            document.getElementById("editStatus").value = row.cells[5].innerText;
-            document.getElementById("editJobUrl").value = row.cells[6].innerText;
-            document.getElementById("editResumeVersion").value = row.cells[7].innerText;
-            document.getElementById("editdescription").value = row.cells[8].innerText;
-            document.getElementById("editNotes").value = row.cells[9].innerText;
+            document.getElementById("editCompany").value = job.companyName;
+            document.getElementById("editJobTitle").value = job.jobTitle;
+            document.getElementById("editLocation").value = job.jobLocation;
+            document.getElementById("editApplyDate").value = job.applicationDate;
+            document.getElementById("editExpireDate").value = job.applicationDeadline;
+            document.getElementById("editStatus").value = job.status;
+            document.getElementById("editJobUrl").value = jobjobUrl;
+            document.getElementById("editResumeVersion").value = job.resumeVersion;
+            document.getElementById("editdescription").value = job.jobDescription;
+            document.getElementById("editNotes").value = job.notes;
 
-            // Display the modal
             document.getElementById("jobModal").style.display = "block";
         }
         
