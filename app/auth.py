@@ -16,10 +16,10 @@ def register():
             cur.execute("INSERT INTO Users(username, email, password) VALUES(%s, %s, %s)",(username, email, hashed_password))
             mysql.connection.commit()
             cur.close()            
-            log(op, "Registered successfully")
+            log(op, username,"Registered successfully")
             return redirect(url_for('login')) # login route
         except Exception as e:
-            log(op, e)
+            log(op, "FailedRegisterHolder" ,e)
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -38,13 +38,18 @@ def login():
                     # Password is correct
                     session['logged_in'] = True
                     session['username'] = user_details['username']
-                    log(op, "Logged in successfully")
+                    log(op, session['username'],"Logged in successfully")
                     return redirect(url_for('dashboard'))
                 else:
                     # Password is wrong
-                    raise Exception("Wrong password")
+                    raise Exception("Wrong password: " + user_details['username'])
             else:
                 raise Exception("User not found")
         except Exception as e:
-            log(op, e)
+            log(op, "FailedLoginHolder", e)
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
