@@ -32,7 +32,7 @@
 
             <!-- List of Jobs -->
             <h2>Your Jobs</h2>
-            <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#addJobModal">
+            <button type="button" class="btn btn-success m-1" id="addJobButton">
                 Add Job
             </button>
             {% if jobs|length > 0 %}
@@ -82,7 +82,7 @@
     <div id="jobModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form id="jobEditForm" method="post" action="/editjob">
+            <form id="jobEditForm" method="post">
                 <h2>Edit Job Application</h2>
                 <label for="editCompany">Company:</label>
                 <input type="text" id="editCompany" name="company_name">
@@ -120,46 +120,6 @@
         </div>
     </div>
 
-    <!-- <div id="addJobModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="jobEditForm" method="post" action="/editjob">
-                <h2>Edit Job Application</h2>
-                <label for="editCompany">Company:</label>
-                <input type="text" id="editCompany" name="company_name">
-                
-                <label for="editJobTitle">Job Title:</label>
-                <input type="text" id="editJobTitle" name="job_title"><br>
-                
-                <label for="editLocation">Location:</label>
-                <input type="text" id="editLocation" name="job_location">
-                
-                <label for="editApplyDate">Date Applied:</label>
-                <input type="date" id="editApplyDate" name="application_date">
-
-                <label for="editExpireDate">Date Expire:</label>
-                <input type="date" id="editExpireDate" name="application_deadline_date"><br>
-
-                <label for="editStatus">Status:</label>
-                <input type="text" id="editStatus" name="status">
-
-                <label for="editJobUrl">Job Link:</label>
-                <input type="text" id="editJobUrl" name="job_url">
-
-                <label for="editResumeVersion">Resume Version:</label>
-                <input type="text" id="editResumeVersion" name="resume_version"><br>
-
-                <label for="editDescription">Description:</label>
-                <textarea id="editDescription" name="job_description"></textarea><br>
-
-                <label for="editNotes">Notes:</label>
-                <textarea id="editNotes" name="notes"></textarea><br>
-    
-                <input type="hidden" id="editId" name="id">
-                <input type="submit"></input>
-            </form>
-        </div>
-    </div> -->
 
     <script>
 
@@ -184,6 +144,16 @@
             });
         });
 
+        document.addEventListener('DOMContentLoaded', () => {
+            const addJobButton = document.getElementById('addJobButton');
+            
+            addJobButton.addEventListener('click', () => {
+
+                document.getElementById("jobModal").action = "/addjob";
+                document.getElementById("jobModal").style.display = "block";
+            });
+        });
+
         function showDetails(job) {
             
             document.getElementById("editCompany").value = job.companyName;
@@ -197,6 +167,7 @@
             document.getElementById("editDescription").value = job.jobDescription;
             document.getElementById("editNotes").value = job.notes;
             document.getElementById("editId").value = job.id;
+            document.getElementById("jobEditForm").action = "/editjob";
 
             document.getElementById("jobModal").style.display = "block";
         }
