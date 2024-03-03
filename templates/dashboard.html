@@ -83,12 +83,12 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <form id="jobEditForm" method="post">
-                <h2>Edit Job Application</h2>
+                <h2 id="jobFormName"></h2>
                 <label for="editCompany">Company:</label>
                 <input type="text" id="editCompany" name="company_name">
                 
                 <label for="editJobTitle">Job Title:</label>
-                <input type="text" id="editJobTitle" name="job_title"><br>
+                <input type="text" id="editJobTitle" name="job_title" required><br>
                 
                 <label for="editLocation">Location:</label>
                 <input type="text" id="editLocation" name="job_location">
@@ -97,7 +97,7 @@
                 <input type="date" id="editApplyDate" name="application_date" required>
 
                 <label for="editExpireDate">Date Expire:</label>
-                <input type="date" id="editExpireDate" name="application_deadline_date" required><br>
+                <input type="date" id="editExpireDate" name="application_deadline_date"><br>
 
                 <label for="editStatus">Status:</label>
                 <input type="text" id="editStatus" name="status">
@@ -149,6 +149,30 @@
             
             addJobButton.addEventListener('click', () => {
 
+                document.getElementById("jobFormName").value = "Add Job Application";
+
+                document.getElementById("editCompany").value = null;
+                document.getElementById("editJobTitle").value = null;
+                document.getElementById("editLocation").value = null;
+                document.getElementById("editExpireDate").value = null;
+                document.getElementById("editStatus").value = null;
+                document.getElementById("editJobUrl").value = null;
+                document.getElementById("editResumeVersion").value = null;
+                document.getElementById("editDescription").value = null;
+                document.getElementById("editNotes").value = null;
+                document.getElementById("editId").value = null;
+
+                var currentDate = new Date();
+
+                // Get the year, month, and day
+                var year = currentDate.getFullYear();
+                var month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Add 1 to month index (month is zero-based)
+                var day = String(currentDate.getDate()).padStart(2, '0');
+
+                // Format the date as "YYYY-MM-DD"
+                var formattedDate = year + '-' + month + '-' + day;
+                document.getElementById("editApplyDate").value = formattedDate;
+
                 document.getElementById("jobEditForm").action = "/addjob";
                 document.getElementById("jobModal").style.display = "block";
             });
@@ -168,6 +192,8 @@
             document.getElementById("editNotes").value = job.notes;
             document.getElementById("editId").value = job.id;
             document.getElementById("jobEditForm").action = "/editjob";
+
+            document.getElementById("jobFormName").value = "Edit Job Application";
 
             document.getElementById("jobModal").style.display = "block";
         }

@@ -33,8 +33,14 @@ def edit_job():
             s += "job_description = '" + userDetails['job_description'] + "', "
             s += "job_location = '" + userDetails['job_location'] + "', "
             s += "job_url = '" + userDetails['job_url'] + "', "
-            s += "application_deadline_date = '" + str(userDetails['application_deadline_date']) + "', "
-            s += "application_date = '" + str(userDetails['application_date']) + "', "
+            if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
+                s += "application_deadline_date = NULL, "
+            else:
+                s += "application_deadline_date = '" + str(userDetails['application_deadline_date']) + "', "
+            if userDetails['application_date'] == None or userDetails['application_date'] == "":
+                s += "application_date = NULL, "
+            else:
+                s += "application_date = '" + str(userDetails['application_date']) + "', "
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
             s += "notes = '" + userDetails['notes'] + "' "
@@ -67,8 +73,14 @@ def add_job():
             s += "'" + userDetails['job_description'] + "',"
             s += "'" + userDetails['job_location'] + "',"
             s += "'" + userDetails['job_url'] + "',"
-            s += "'" + str(userDetails['application_deadline_date']) + "',"
-            s += "'" + str(userDetails['application_date']) + "',"
+            if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
+                s += "NULL,"
+            else:
+                s += "'" + str(userDetails['application_deadline_date']) + "',"
+            if userDetails['application_date'] == None or userDetails['application_date'] == "":
+                s += "NULL,"
+            else:
+                s += "'" + str(userDetails['application_date']) + "',"
             s += "'" + userDetails['resume_version'] + "',"
             s += "'" + userDetails['status'] + "',"
             s += "'" + userDetails['notes'] + "'"
