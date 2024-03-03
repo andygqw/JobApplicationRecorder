@@ -72,7 +72,11 @@
                                 <td>{{ job.application_date }}</td>
                                 <td>{{ job.application_deadline_date }}</td>
                                 <td>{{ job.status }}</td>
-                                <td><a href="{{ job.job_url }}">click here</a></td>
+                                <td>
+                                    {% if job.job_url != None and job.job_url != "" %}
+                                        <a href="{{ job.job_url }}">click here</a>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
