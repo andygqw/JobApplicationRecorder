@@ -24,58 +24,58 @@
             <div class="card-body">
                 <h5 class="card-title">User Information</h5>
                 <p class="card-text">Manage your information, update your profile, and more.</p>
-                <a href="#" class="btn btn-primary">Edit Profile</a>
+                <a href="/dashboard" class="btn btn-primary">Edit Profile</a>
                 <a href="/logout" class="btn btn-danger">Log Out</a>
             </div>
         </div>
         <section class="card mt-4 p-4">
-            <!-- Add Job Form -->
-            <!-- <form method="post" class="add-job-form">
-                <h2>Add New Job</h2>
-                <input type="hidden" name="operation" value="add_job"> -->
-                <!-- Input fields for job details -->
-                <!-- <button type="submit">Add Job</button>
-            </form> -->
 
             <!-- List of Jobs -->
             <h2>Your Jobs</h2>
+            <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#addJobModal">
+                Add Job
+            </button>
+            {% if jobs|length > 0 %}
             <table class="jobs-table">
-                <thead>
-                    <tr>
-                        <th>Company</th>
-                        <th>Job Title</th>
-                        <th>Location</th>
-                        <th>Date Applied</th>
-                        <th>Date Expire</th>
-                        <th>Status</th>
-                        <th>Job Link</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for job in jobs %}
-                        <tr data-id="{{ job.id }}"
-                            data-company-name="{{ job.company_name }}"
-                            data-job-title="{{ job.job_title }}"
-                            data-job-location="{{ job.job_location }}"
-                            data-application-date="{{ job.application_date }}"
-                            data-application-deadline="{{ job.application_deadline_date }}"
-                            data-status="{{ job.status }}"
-                            data-job-url="{{ job.job_url }}"
-                            data-resume-version="{{ job.resume_version }}"
-                            data-job-description="{{ job.job_description | escape }}"
-                            data-notes="{{ job.notes | escape }}">
-                            <td>{{ job.company_name }}</td>
-                            <td>{{ job.job_title }}</td>
-                            <td>{{ job.job_location }}</td>
-                            <td>{{ job.application_date }}</td>
-                            <td>{{ job.application_deadline_date }}</td>
-                            <td>{{ job.status }}</td>
-                            <td><a href="{{ job.job_url }}">click here</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                    <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Job Title</th>
+                                <th>Location</th>
+                                <th>Date Applied</th>
+                                <th>Date Expire</th>
+                                <th>Status</th>
+                                <th>Job Link</th>
+                                <th></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                            <tr data-id="{{ job.id }}"
+                                data-company-name="{{ job.company_name }}"
+                                data-job-title="{{ job.job_title }}"
+                                data-job-location="{{ job.job_location }}"
+                                data-application-date="{{ job.application_date }}"
+                                data-application-deadline="{{ job.application_deadline_date }}"
+                                data-status="{{ job.status }}"
+                                data-job-url="{{ job.job_url }}"
+                                data-resume-version="{{ job.resume_version }}"
+                                data-job-description="{{ job.job_description | escape }}"
+                                data-notes="{{ job.notes | escape }}">
+                                <td>{{ job.company_name }}</td>
+                                <td>{{ job.job_title }}</td>
+                                <td>{{ job.job_location }}</td>
+                                <td>{{ job.application_date }}</td>
+                                <td>{{ job.application_deadline_date }}</td>
+                                <td>{{ job.status }}</td>
+                                <td><a href="{{ job.job_url }}">click here</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
+            {% else %}
+            <h4 class="mt-3">You do not have any job application yet, try add one.</h4>
+            {% endif %}
         </section>
     </div>
 
@@ -85,25 +85,25 @@
             <form id="jobEditForm" method="post" action="/editjob">
                 <h2>Edit Job Application</h2>
                 <label for="editCompany">Company:</label>
-                <input type="text" id="editCompany" name="company_name"><br>
+                <input type="text" id="editCompany" name="company_name">
                 
                 <label for="editJobTitle">Job Title:</label>
                 <input type="text" id="editJobTitle" name="job_title"><br>
                 
                 <label for="editLocation">Location:</label>
-                <input type="text" id="editLocation" name="job_location"><br>
+                <input type="text" id="editLocation" name="job_location">
                 
                 <label for="editApplyDate">Date Applied:</label>
-                <input type="date" id="editApplyDate" name="application_date"><br>
+                <input type="date" id="editApplyDate" name="application_date">
 
                 <label for="editExpireDate">Date Expire:</label>
                 <input type="date" id="editExpireDate" name="application_deadline_date"><br>
 
                 <label for="editStatus">Status:</label>
-                <input type="text" id="editStatus" name="status"><br>
+                <input type="text" id="editStatus" name="status">
 
                 <label for="editJobUrl">Job Link:</label>
-                <input type="text" id="editJobUrl" name="job_url"><br>
+                <input type="text" id="editJobUrl" name="job_url">
 
                 <label for="editResumeVersion">Resume Version:</label>
                 <input type="text" id="editResumeVersion" name="resume_version"><br>
@@ -119,6 +119,47 @@
             </form>
         </div>
     </div>
+
+    <!-- <div id="addJobModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="jobEditForm" method="post" action="/editjob">
+                <h2>Edit Job Application</h2>
+                <label for="editCompany">Company:</label>
+                <input type="text" id="editCompany" name="company_name">
+                
+                <label for="editJobTitle">Job Title:</label>
+                <input type="text" id="editJobTitle" name="job_title"><br>
+                
+                <label for="editLocation">Location:</label>
+                <input type="text" id="editLocation" name="job_location">
+                
+                <label for="editApplyDate">Date Applied:</label>
+                <input type="date" id="editApplyDate" name="application_date">
+
+                <label for="editExpireDate">Date Expire:</label>
+                <input type="date" id="editExpireDate" name="application_deadline_date"><br>
+
+                <label for="editStatus">Status:</label>
+                <input type="text" id="editStatus" name="status">
+
+                <label for="editJobUrl">Job Link:</label>
+                <input type="text" id="editJobUrl" name="job_url">
+
+                <label for="editResumeVersion">Resume Version:</label>
+                <input type="text" id="editResumeVersion" name="resume_version"><br>
+
+                <label for="editDescription">Description:</label>
+                <textarea id="editDescription" name="job_description"></textarea><br>
+
+                <label for="editNotes">Notes:</label>
+                <textarea id="editNotes" name="notes"></textarea><br>
+    
+                <input type="hidden" id="editId" name="id">
+                <input type="submit"></input>
+            </form>
+        </div>
+    </div> -->
 
     <script>
 

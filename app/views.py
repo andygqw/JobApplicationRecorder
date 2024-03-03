@@ -9,11 +9,15 @@ def home():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-    if session.get('logged_in'):
+    try:
+        if session.get('logged_in'):
 
-        jobs = fetch_all_jobs_for_user(session['user_id'])
-        return render_template('dashboard.html', username=session.get('username'),jobs = jobs)
-    else:
+            jobs = fetch_all_jobs_for_user(session['user_id'])
+            return render_template('dashboard.html', username=session.get('username'),jobs = jobs)
+        else:
+            return redirect(url_for('login'))
+    except Exception as e:
+        log("Dashboard", "FailedLoadHolder", str(e))
         return redirect(url_for('login'))
 
 @app.route('/editjob', methods=['POST'])
@@ -46,7 +50,37 @@ def edit_job():
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
+    
+@app.route('/addjob', methods=['POST'])
+def add_job():
+    op = "Add job"
+    if session.get('logged_in'):
+        try:
+            userDetails = request.form
+            cur = mysql.connection.cursor()
 
+            s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'] + "', "
+            s += "company_name = '" + userDetails['company_name'] + "', "
+            s += "job_description = '" + userDetails['job_description'] + "', "
+            s += "job_location = '" + userDetails['job_location'] + "', "
+            s += "job_url = '" + userDetails['job_url'] + "', "
+            s += "application_deadline_date = '" + str(userDetails['application_deadline_date']) + "', "
+            s += "application_date = '" + str(userDetails['application_date']) + "', "
+            s += "resume_version = '" + userDetails['resume_version'] + "', "
+            s += "status = '" + userDetails['status'] + "', "
+            s += "notes = '" + userDetails['notes'] + "' "
+            s += "WHERE id = " + userDetails['id'] + ";"
+            cur.execute(s)
+
+            mysql.connection.commit()
+            cur.close()
+            log(op, session['username'], "Job added successfully " + s)
+            return redirect(url_for('dashboard'))
+        except Exception as e:
+            log(op, "FailedEditJobHolder", str(e) + " " + s)
+            return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('login'))
 
     
 def fetch_all_jobs_for_user(user_id):
