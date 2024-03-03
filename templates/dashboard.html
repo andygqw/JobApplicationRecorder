@@ -184,6 +184,7 @@
                 var formattedDate = year + '-' + month + '-' + day;
                 document.getElementById("editApplyDate").value = formattedDate;
 
+                document.getElementById("deleteJobButton").style.display = "none";
                 document.getElementById("jobEditForm").action = "/addjob";
                 document.getElementById("jobModal").style.display = "block";
             });
