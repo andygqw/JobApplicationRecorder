@@ -28,11 +28,11 @@ def edit_job():
             userDetails = request.form
             cur = mysql.connection.cursor()
 
-            s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'] + "', "
-            s += "company_name = '" + userDetails['company_name'] + "', "
-            s += "job_description = '" + userDetails['job_description'] + "', "
-            s += "job_location = '" + userDetails['job_location'] + "', "
-            s += "job_url = '" + userDetails['job_url'] + "', "
+            s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'].replace("'", "\\'") + "', "
+            s += "company_name = '" + userDetails['company_name'].replace("'", "\\'") + "', "
+            s += "job_description = '" + userDetails['job_description'].replace("'", "\\'") + "', "
+            s += "job_location = '" + userDetails['job_location'].replace("'", "\\'") + "', "
+            s += "job_url = '" + userDetails['job_url'].replace("'", "\\'") + "', "
             if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
                 s += "application_deadline_date = NULL, "
             else:
@@ -43,7 +43,7 @@ def edit_job():
                 s += "application_date = '" + str(userDetails['application_date']) + "', "
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
-            s += "notes = '" + userDetails['notes'] + "' "
+            s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "' "
             s += "WHERE id = " + userDetails['id'] + ";"
             cur.execute(s)
 
@@ -67,12 +67,12 @@ def add_job():
 
             s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes)"
             s += " VALUES ("
-            s += str(session['user_id']) + ","
-            s += "'" + userDetails['job_title'] + "',"
-            s += "'" + userDetails['company_name'] + "',"
-            s += "'" + userDetails['job_description'] + "',"
-            s += "'" + userDetails['job_location'] + "',"
-            s += "'" + userDetails['job_url'] + "',"
+            s += str(session['user_id']).replace("'", "\\'") + ","
+            s += "'" + userDetails['job_title'].replace("'", "\\'") + "',"
+            s += "'" + userDetails['company_name'].replace("'", "\\'") + "',"
+            s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
+            s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
+            s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
             if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
                 s += "NULL,"
             else:
@@ -83,7 +83,7 @@ def add_job():
                 s += "'" + str(userDetails['application_date']) + "',"
             s += "'" + userDetails['resume_version'] + "',"
             s += "'" + userDetails['status'] + "',"
-            s += "'" + userDetails['notes'] + "'"
+            s += "'" + userDetails['notes'].replace("'", "\\'") + "'"
             s += ");"
 
             cur.execute(s)
