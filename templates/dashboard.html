@@ -124,7 +124,7 @@
     
                 <input type="hidden" id="editId" name="id">
                 <input type="submit"></input>
-                <button type="button" class="btn btn-danger" id="deleteJobButton">
+                <button type="button" class="btn btn-danger" style="display:none;" id="deleteJobButton">
                     delete
                 </button>
             </form>
@@ -206,6 +206,7 @@
 
             document.getElementById("jobFormName").value = "Edit Job Application";
 
+            document.getElementById("deleteJobButton").style.display = "inline-block";
             document.getElementById("jobModal").style.display = "block";
         }
         

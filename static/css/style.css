@@ -59,7 +59,7 @@ main {
 }
 
 button {
-    width: 100%;
+    width: auto;
     background: #0779e4;
     color: white;
     padding: 10px;
