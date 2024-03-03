@@ -59,17 +59,21 @@ def add_job():
             userDetails = request.form
             cur = mysql.connection.cursor()
 
-            s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'] + "', "
-            s += "company_name = '" + userDetails['company_name'] + "', "
-            s += "job_description = '" + userDetails['job_description'] + "', "
-            s += "job_location = '" + userDetails['job_location'] + "', "
-            s += "job_url = '" + userDetails['job_url'] + "', "
-            s += "application_deadline_date = '" + str(userDetails['application_deadline_date']) + "', "
-            s += "application_date = '" + str(userDetails['application_date']) + "', "
-            s += "resume_version = '" + userDetails['resume_version'] + "', "
-            s += "status = '" + userDetails['status'] + "', "
-            s += "notes = '" + userDetails['notes'] + "' "
-            s += "WHERE id = " + userDetails['id'] + ";"
+            s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes)"
+            s += " VALUES ("
+            s += str(session['user_id']) + ","
+            s += "'" + userDetails['job_title'] + "',"
+            s += "'" + userDetails['company_name'] + "',"
+            s += "'" + userDetails['job_description'] + "',"
+            s += "'" + userDetails['job_location'] + "',"
+            s += "'" + userDetails['job_url'] + "',"
+            s += "'" + str(userDetails['application_deadline_date']) + "',"
+            s += "'" + str(userDetails['application_date']) + "',"
+            s += "'" + userDetails['resume_version'] + "',"
+            s += "'" + userDetails['status'] + "',"
+            s += "'" + userDetails['notes'] + "'"
+            s += ");"
+
             cur.execute(s)
 
             mysql.connection.commit()
@@ -77,7 +81,7 @@ def add_job():
             log(op, session['username'], "Job added successfully " + s)
             return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "FailedEditJobHolder", str(e) + " " + s)
+            log(op, "FailedAddJobHolder", str(e) + " " + s)
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))

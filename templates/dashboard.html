@@ -94,16 +94,16 @@
                 <input type="text" id="editLocation" name="job_location">
                 
                 <label for="editApplyDate">Date Applied:</label>
-                <input type="date" id="editApplyDate" name="application_date">
+                <input type="date" id="editApplyDate" name="application_date" required>
 
                 <label for="editExpireDate">Date Expire:</label>
-                <input type="date" id="editExpireDate" name="application_deadline_date"><br>
+                <input type="date" id="editExpireDate" name="application_deadline_date" required><br>
 
                 <label for="editStatus">Status:</label>
                 <input type="text" id="editStatus" name="status">
 
                 <label for="editJobUrl">Job Link:</label>
-                <input type="text" id="editJobUrl" name="job_url">
+                <input type="text" id="editJobUrl" name="job_url"><br>
 
                 <label for="editResumeVersion">Resume Version:</label>
                 <input type="text" id="editResumeVersion" name="resume_version"><br>
@@ -149,7 +149,7 @@
             
             addJobButton.addEventListener('click', () => {
 
-                document.getElementById("jobModal").action = "/addjob";
+                document.getElementById("jobEditForm").action = "/addjob";
                 document.getElementById("jobModal").style.display = "block";
             });
         });
