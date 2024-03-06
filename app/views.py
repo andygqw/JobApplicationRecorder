@@ -13,7 +13,9 @@ def dashboard():
         if session.get('logged_in'):
 
             jobs = fetch_all_jobs_for_user(session['user_id'])
-            return render_template('dashboard.html', username=session.get('username'),jobs = jobs)
+
+            jobStatusOptions = ['Applied', 'Rejected', 'Interviewing', 'Expired'] 
+            return render_template('dashboard.html', username=session.get('username'),jobs = jobs, jobStatusOptions = jobStatusOptions)
         else:
             return redirect(url_for('login'))
     except Exception as e:
@@ -26,6 +28,7 @@ def edit_job():
     if session.get('logged_in'):
         try:
             userDetails = request.form
+
             cur = mysql.connection.cursor()
 
             s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'].replace("'", "\\'") + "', "
