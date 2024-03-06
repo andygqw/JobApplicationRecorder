@@ -108,7 +108,7 @@ def delete_job(item_id):
             cur.execute(s)
             mysql.connection.commit()
             cur.close()
-            log(op, session['username'],"Job deleted succesfully")
+            log(op, session['username'], "Job deleted succesfully " + s)
             return '', 204
         except Exception as e:
             log(op, "FailedDeleteJobHolder", str(e) + " " + s)

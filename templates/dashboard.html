@@ -259,7 +259,7 @@
             itemIdToDelete = 0;
         }
 
-        document.getElementById('confirmDelete').addEventListener('click', function() {
+        document.getElementById('deleteConfirm').addEventListener('click', function() {
             fetch(`/delete_job/${itemIdToDelete}`, { method: 'POST' })
             .then(response => {
                 if (response.ok) {
