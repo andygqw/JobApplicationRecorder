@@ -125,7 +125,7 @@
     
                 <input type="hidden" id="editId" name="id">
                 <input type="submit"></input>
-                <button type="button" class="btn btn-danger" style="display:none;" id="deleteJobButton">
+                <button type="button" class="btn btn-danger" style="display:none;" id="deleteJobButton" onclick="showDeleteModal()">
                     delete
                 </button>
             </form>
@@ -231,18 +231,11 @@
 
         let itemIdToDelete = 0;
 
-        function showDeleteModal(itemId) {
-            itemIdToDelete = itemId;
+        function showDeleteModal() {
+            itemIdToDelete = document.getElementById("editId").value
             document.getElementById("jobModal").style.display = "none";
             document.getElementById("deleteModal").style.display = "block";
         }
-
-        document.getElementById('deleteJobButton').addEventListener('click', function() {
-            
-            document.getElementById("deleteModal").style.display = "block";
-            document.getElementById("jobModal").style.display = "none";
-            itemIdToDelete = 0;
-        });
 
         document.getElementById('cancelDelete').addEventListener('click', function() {
             cancelDelete();
