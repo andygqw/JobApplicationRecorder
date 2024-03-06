@@ -139,7 +139,7 @@
                 <div>Do you really want to delete this job application?</div>
             </div>
             <div>
-                <button class="btn btn-secondary rounded-2" id="deleteCancel">Cancel</button>
+                <button class="btn btn-secondary rounded-2" id="cancelDelete">Cancel</button>
                 <button class="btn btn-danger" id="deleteConfirm">Delete</button>
             </div>
         </div>
@@ -245,11 +245,19 @@
         });
 
         document.getElementById('cancelDelete').addEventListener('click', function() {
-            
+            cancelDelete();
+        });
+
+        document.getElementById('deleteModalClose').addEventListener('click', function() {
+            cancelDelete();
+        });
+
+        function cancelDelete(){
+
             document.getElementById("deleteModal").style.display = "none";
             document.getElementById("jobModal").style.display = "block";
             itemIdToDelete = 0;
-        });
+        }
 
         document.getElementById('confirmDelete').addEventListener('click', function() {
             fetch(`/delete_job/${itemIdToDelete}`, { method: 'POST' })
