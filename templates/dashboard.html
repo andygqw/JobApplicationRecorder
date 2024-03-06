@@ -237,6 +237,13 @@
             document.getElementById("deleteModal").style.display = "block";
         }
 
+        document.getElementById('deleteJobButton').addEventListener('click', function() {
+            
+            document.getElementById("deleteModal").style.display = "block";
+            document.getElementById("jobModal").style.display = "none";
+            itemIdToDelete = 0;
+        });
+
         document.getElementById('cancelDelete').addEventListener('click', function() {
             
             document.getElementById("deleteModal").style.display = "none";
