@@ -39,6 +39,7 @@
             <button type="button" class="btn btn-success m-1" id="addJobButton">
                 Add Job
             </button>
+            <div>Total: {{ jobs|length }} applications</div>
             {% if jobs|length > 0 %}
             <table class="jobs-table">
                     <thead>
@@ -131,6 +132,18 @@
         </div>
     </div>
 
+    <div class="modal" id="deleteModal">
+        <div class="modal-content text-center fw-bold flex-grow">
+            <span class="close" id="deleteModalClose">&times;</span>
+            <div class="mb-2 mx-4">
+                <div>Do you really want to delete this job application?</div>
+            </div>
+            <div>
+                <button class="btn btn-secondary rounded-2" id="deleteCancel">Cancel</button>
+                <button class="btn btn-danger" id="deleteConfirm">Delete</button>
+            </div>
+        </div>
+    </div>
 
     <script>
 
@@ -215,6 +228,34 @@
         span.onclick = function() {
             document.getElementById("jobModal").style.display = "none";
         }
+
+        let itemIdToDelete = 0;
+
+        function showDeleteModal(itemId) {
+            itemIdToDelete = itemId;
+            document.getElementById("jobModal").style.display = "none";
+            document.getElementById("deleteModal").style.display = "block";
+        }
+
+        document.getElementById('cancelDelete').addEventListener('click', function() {
+            
+            document.getElementById("deleteModal").style.display = "none";
+            document.getElementById("jobModal").style.display = "block";
+            itemIdToDelete = 0;
+        });
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            fetch(`/delete_job/${itemIdToDelete}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    $('#deleteModal').modal('hide');
+                    window.location.reload();
+                } else {
+                    alert('Error deleting item');
+                }
+            });
+        });
+
         
         window.onclick = function(event) {
             var modal = document.getElementById("jobModal");

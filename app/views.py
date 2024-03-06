@@ -97,6 +97,24 @@ def add_job():
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
+    
+@app.route('/delete_job/<int:item_id>', methods=['POST'])
+def delete_job(item_id):
+    op = "Delete job"
+    if session.get('logged_in'):
+        try:
+            cur = mysql.connection.cursor()
+            s = "DELETE FROM JobApplications WHERE id = " + str(item_id) + ";"
+            cur.execute(s)
+            mysql.connection.commit()
+            cur.close()
+            log(op, session['username'],"Job deleted succesfully")
+            return '', 204
+        except Exception as e:
+            log(op, "FailedDeleteJobHolder", str(e) + " " + s)
+            return '', 400
+    else:
+        return '', 401
 
     
 def fetch_all_jobs_for_user(user_id):
