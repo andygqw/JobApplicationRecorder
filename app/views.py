@@ -46,7 +46,8 @@ def edit_job():
                 s += "application_date = '" + str(userDetails['application_date']) + "', "
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
-            s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "' "
+            s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "', "
+            s += "isMarked = " + userDetails['isMarked']
             s += "WHERE id = " + userDetails['id'] + ";"
             cur.execute(s)
 
@@ -68,7 +69,7 @@ def add_job():
             userDetails = request.form
             cur = mysql.connection.cursor()
 
-            s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes)"
+            s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, isMarked)"
             s += " VALUES ("
             s += str(session['user_id']).replace("'", "\\'") + ","
             s += "'" + userDetails['job_title'].replace("'", "\\'") + "',"
@@ -86,7 +87,8 @@ def add_job():
                 s += "'" + str(userDetails['application_date']) + "',"
             s += "'" + userDetails['resume_version'] + "',"
             s += "'" + userDetails['status'] + "',"
-            s += "'" + userDetails['notes'].replace("'", "\\'") + "'"
+            s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
+            s += userDetails['isMarked']
             s += ");"
 
             cur.execute(s)
