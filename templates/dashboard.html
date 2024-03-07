@@ -36,10 +36,12 @@
 
             <!-- List of Jobs -->
             <h2>Your Jobs</h2>
-            <button type="button" class="btn btn-success m-1" id="addJobButton">
-                Add Job
-            </button>
-            <div>Total: {{ jobs|length }} applications</div>
+            <div>
+                <button type="button" class="btn btn-success m-1" id="addJobButton">
+                    Add Job
+                </button>
+                Total: {{ jobs|length }} applications
+            </div>
             {% if jobs|length > 0 %}
             <table class="jobs-table">
                     <thead>
