@@ -68,7 +68,8 @@
                                 data-job-url="{{ job.job_url }}"
                                 data-resume-version="{{ job.resume_version }}"
                                 data-job-description="{{ job.job_description | escape }}"
-                                data-notes="{{ job.notes | escape }}">
+                                data-notes="{{ job.notes | escape }}"
+                                data-isMarked="{{ job.isMarked }}">
                                 <td>{{ job.company_name }}</td>
                                 <td>{{ job.job_title }}</td>
                                 <td>{{ job.job_location }}</td>
@@ -128,6 +129,9 @@
 
                 <label for="editNotes">Notes:</label>
                 <textarea id="editNotes" name="notes"></textarea><br>
+
+                <label for="editIsMarked">Favorite:</label>
+                <input type="checkbox" id="editIsMarked" name="isMarked"></checkbox>
     
                 <input type="hidden" id="editId" name="id">
                 <input type="submit"></input>
@@ -168,7 +172,8 @@
                         jobUrl: this.getAttribute('data-job-url'),
                         resumeVersion: this.getAttribute('data-resume-version'),
                         jobDescription: this.getAttribute('data-job-description'),
-                        notes: this.getAttribute('data-notes')
+                        notes: this.getAttribute('data-notes'),
+                        isMarked: this.getAttribute('data-isMarked')
                     });
                 });
             });
@@ -191,6 +196,7 @@
                 document.getElementById("editDescription").value = null;
                 document.getElementById("editNotes").value = null;
                 document.getElementById("editId").value = null;
+                document.getElementById("editIsMarked").value = 0;
 
                 var currentDate = new Date();
 
@@ -221,6 +227,7 @@
             document.getElementById("editResumeVersion").value = job.resumeVersion;
             document.getElementById("editDescription").value = job.jobDescription;
             document.getElementById("editNotes").value = job.notes;
+            document.getElementById("editIsMarked").value = job.isMarked;
             document.getElementById("editId").value = job.id;
             document.getElementById("jobEditForm").action = "/editjob";
 
