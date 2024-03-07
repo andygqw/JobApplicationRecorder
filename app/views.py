@@ -47,8 +47,8 @@ def edit_job():
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
             s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "', "
-            s += "isMarked = " + userDetails['isMarked']
-            s += "WHERE id = " + userDetails['id'] + ";"
+            s += "isMarked = " + ('1' if userDetails['isMarked'] else '0')
+            s += " WHERE id = " + userDetails['id'] + ";"
             cur.execute(s)
 
             mysql.connection.commit()
@@ -88,7 +88,7 @@ def add_job():
             s += "'" + userDetails['resume_version'] + "',"
             s += "'" + userDetails['status'] + "',"
             s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
-            s += userDetails['isMarked']
+            s += ('1' if userDetails['isMarked'] else '0')
             s += ");"
 
             cur.execute(s)
