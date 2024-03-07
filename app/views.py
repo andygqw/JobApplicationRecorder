@@ -122,7 +122,7 @@ def delete_job(item_id):
     
 def fetch_all_jobs_for_user(user_id):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM `JobApplications` WHERE user_id = %s ORDER BY application_date DESC", [user_id])
+    cur.execute("SELECT * FROM `JobApplications` WHERE user_id = %s ORDER BY application_date DESC, id DESC", [user_id])
     jobs = cur.fetchall()
     cur.close()
     return jobs
