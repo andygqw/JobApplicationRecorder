@@ -111,7 +111,7 @@
                 <input type="date" id="editExpireDate" name="application_deadline_date"><br>
 
                 <label for="editStatus">Status:</label>
-                <select name="status" id="editStatus">
+                <select name="status" id="editStatus" required>
                     {% for option in  jobStatusOptions %}
                         <option value="{{ option }}">{{ option }}</option>
                     {% endfor %}
