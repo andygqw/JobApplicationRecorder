@@ -12,7 +12,7 @@ app.config["MYSQL_PASSWORD"] = "--s"
 app.config["MYSQL_DB"] = "JobApplications"
 
 # Set session to expire after xx minutes of inactivity
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 # Extra configs, optional:
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'  # This enables dictionary cursor
