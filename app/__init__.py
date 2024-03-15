@@ -6,8 +6,8 @@ from datetime import timedelta
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
 # Required
-app.config['MYSQL_HOST'] = 'localhost'
-app.config["MYSQL_USER"] = "root"
+app.config['MYSQL_HOST'] = '54.177.5.41'
+app.config["MYSQL_USER"] = "Dev"
 app.config["MYSQL_PASSWORD"] = "--s"
 app.config["MYSQL_DB"] = "JobApplications"
 
