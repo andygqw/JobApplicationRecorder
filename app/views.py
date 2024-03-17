@@ -15,7 +15,7 @@ def dashboard():
             jobs = fetch_all_jobs_for_user(session['user_id'])
 
             for job in jobs:
-                job['isMarked'] = list(job['isMarked'])
+                job['isMarked'] = str(int.from_bytes(job['isMarked'], 'big'))
 
             jobStatusOptions = ['Applied', 'Rejected', 'Gave', 'Interviewing', 'Expired'] 
             return render_template('dashboard.html', username=session.get('username'),jobs = jobs, jobStatusOptions = jobStatusOptions)
