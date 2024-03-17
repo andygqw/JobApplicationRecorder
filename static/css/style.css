@@ -96,6 +96,9 @@ button:hover {
 .jobs-table th:nth-child(6), .jobs-table td:nth-child(6) { width: 12%; } /* Status */
 .jobs-table th:nth-child(7), .jobs-table td:nth-child(7) { width: 13%; } /* Job Link */
 
+.highlighted {
+    background-color: #ffff99;
+}
 
 .modal {
     display: none;
