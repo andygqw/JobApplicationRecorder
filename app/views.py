@@ -17,7 +17,7 @@ def dashboard():
             for job in jobs:
                 job['isMarked'] = str(int.from_bytes(job['isMarked'], 'big'))
 
-            jobStatusOptions = ['Applied', 'Rejected', 'Gave', 'Interviewing', 'Expired'] 
+            jobStatusOptions = ['Applied', 'Rejected', 'Gave up', 'Interviewing', 'Expired'] 
             return render_template('dashboard.html', username=session.get('username'),jobs = jobs, jobStatusOptions = jobStatusOptions)
         else:
             return redirect(url_for('login'))
@@ -50,7 +50,6 @@ def edit_job():
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
             s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "', "
-            print(userDetails)
             s += "isMarked = " + ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
             s += " WHERE id = " + userDetails['id'] + ";"
             cur.execute(s)
@@ -92,7 +91,7 @@ def add_job():
             s += "'" + userDetails['resume_version'] + "',"
             s += "'" + userDetails['status'] + "',"
             s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
-            s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == '1' else '0')
+            s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
             s += ");"
 
             cur.execute(s)
