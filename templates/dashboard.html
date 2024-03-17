@@ -131,7 +131,6 @@
                 <textarea id="editNotes" name="notes"></textarea><br>
 
                 <label for="editIsMarked">Favorite:</label>
-                <input type="hidden" name="isMarked" value="0"> <!-- TODO -->
                 <input type="checkbox" id="editIsMarked" name="isMarked"></checkbox><br>
     
                 <input type="hidden" id="editId" name="id">
@@ -228,7 +227,9 @@
             document.getElementById("editResumeVersion").value = job.resumeVersion;
             document.getElementById("editDescription").value = job.jobDescription;
             document.getElementById("editNotes").value = job.notes;
-            document.getElementById("editIsMarked").checked = job.isMarked;
+
+            document.getElementById("editIsMarked").checked = job.isMarked[1] === '1';
+            console.log(job.isMarked[1]);
             document.getElementById("editId").value = job.id;
             document.getElementById("jobEditForm").action = "/editjob";
 
