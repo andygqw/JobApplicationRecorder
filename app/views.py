@@ -50,7 +50,8 @@ def edit_job():
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
             s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "', "
-            s += "isMarked = " + ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == '1' else '0')
+            print(userDetails)
+            s += "isMarked = " + ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
             s += " WHERE id = " + userDetails['id'] + ";"
             cur.execute(s)
 
