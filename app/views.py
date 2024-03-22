@@ -146,8 +146,37 @@ def quick_add():
                 #soup.findAll finds all html headers 
                 titleTag = soup.findAll("span", class_="job-details-jobs-unified-top-card__job-title-link")
                 title = titleTag.contents[0]
-                print(title)
+
                 company = soup.findAll("div", class_="job-details-jobs-unified-top-card__primary-description-container")
+                c = company.findAll("a", class_="app-aware-link ")
+                companyName = c.contens[0]
+
+                cur = mysql.connection.cursor()
+                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, isMarked)"
+                s += " VALUES ("
+                s += str(session['user_id']).replace("'", "\\'") + ","
+                s += "'" + title.replace("'", "\\'") + "',"
+                s += "'" + companyName + "',"
+                s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
+                s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
+                s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
+                if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
+                    s += "NULL,"
+                else:
+                    s += "'" + str(userDetails['application_deadline_date']) + "',"
+                if userDetails['application_date'] == None or userDetails['application_date'] == "":
+                    s += "NULL,"
+                else:
+                    s += "'" + str(userDetails['application_date']) + "',"
+                s += "'" + userDetails['resume_version'] + "',"
+                s += "'" + userDetails['status'] + "',"
+                s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
+                s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
+                s += ");"
+                cur.execute(s)
+                mysql.connection.commit()
+                cur.close()
+                log(op, session['username'], "Job deleted succesfully " + s)
 
             return '', 204
         except Exception as e:
