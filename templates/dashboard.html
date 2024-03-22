@@ -155,6 +155,18 @@
             </div>
         </div>
     </div>
+    
+    <div id="quickAddModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="quickAddForm" method="post">
+
+                <input type = "text" id = "quickAddUrl" name = "quickAddUrl"></input> <br>
+
+                <input type="submit"></input>
+            </form>
+        </div>
+    </div>
 
     <script>
 
@@ -278,6 +290,18 @@
                 }
             });
         });
+
+        // document.getElementById('quickAdd').addEventListener('click', function() {
+        //     fetch(`/quick_add/`, { method: 'POST' })
+        //     .then(response => {
+        //         if (response.ok) {
+        //             $('#deleteModal').modal('hide');
+        //             window.location.reload();
+        //         } else {
+        //             alert('Error deleting item');
+        //         }
+        //     });
+        // });
 
         
         window.onclick = function(event) {

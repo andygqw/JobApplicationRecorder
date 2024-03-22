@@ -123,6 +123,23 @@ def delete_job(item_id):
             return '', 400
     else:
         return '', 401
+    
+@app.route('/quick_add', methods=['POST'])
+def d_quick_add():
+    op = "quick_add"
+    if session.get('logged_in'):
+        try:
+            userDetails = request.form
+            url = userDetails['quickAddUrl']
+            cur = mysql.connection.cursor()
+            
+            
+            return '', 204
+        except Exception as e:
+            log(op, "FailedDeleteJobHolder", str(e) + " " + s)
+            return '', 400
+    else:
+        return '', 401
 
     
 def fetch_all_jobs_for_user(user_id):
