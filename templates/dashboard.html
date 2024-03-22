@@ -40,6 +40,9 @@
                 <button type="button" class="btn btn-success m-1" id="addJobButton">
                     Add Job
                 </button>
+                <button type="button" class="btn btn-secondary m-1" id="quickAddButton">
+                    Quick Add
+                </button>
                 Total: {{ jobs|length }} applications
             </div>
             {% if jobs|length > 0 %}
@@ -159,7 +162,7 @@
     <div id="quickAddModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form id="quickAddForm" method="post">
+            <form id="quickAddForm" action="/quick_add" method="post">
 
                 <input type = "text" id = "quickAddUrl" name = "quickAddUrl"></input> <br>
 
@@ -254,6 +257,7 @@
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
             document.getElementById("jobModal").style.display = "none";
+            documeny.getElementById("quickAddModal").style.display="none";
         }
 
         let itemIdToDelete = 0;
@@ -289,6 +293,11 @@
                     alert('Error deleting item');
                 }
             });
+        });
+
+        document.getElementById('quickAddButton').addEventListener('click', function(){
+
+            document.getElementById("quickAddModal").style.display = "block";
         });
 
         // document.getElementById('quickAdd').addEventListener('click', function() {

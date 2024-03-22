@@ -1,7 +1,9 @@
 from flask import render_template, session, redirect, url_for, request
 from app import app, mysql
 from app.logger import log
+
 import requests
+from bs4 import BeautifulSoup as bs
 
 # Main route
 @app.route('/')
@@ -125,15 +127,27 @@ def delete_job(item_id):
     else:
         return '', 401
     
-@app.route('/quick_add', methods=['POST'])
-def d_quick_add():
+@app.route('/quick_add', methods=['GET','POST'])
+def quick_add():
     op = "quick_add"
     if session.get('logged_in'):
         try:
             userDetails = request.form
             url = userDetails['quickAddUrl']
-            cur = mysql.connection.cursor()
-            
+
+            response = requests.get(url)
+            if response.ok:
+
+                content = response.text
+
+                #Using beautiful soup to parse html file
+                soup = bs(content, "html.parser")
+
+                #soup.findAll finds all html headers 
+                titleTag = soup.findAll("span", class_="job-details-jobs-unified-top-card__job-title-link")
+                title = titleTag.contents[0]
+                print(title)
+                company = soup.findAll("div", class_="job-details-jobs-unified-top-card__primary-description-container")
 
             return '', 204
         except Exception as e:
