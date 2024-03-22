@@ -1,6 +1,7 @@
 from flask import render_template, session, redirect, url_for, request
 from app import app, mysql
 from app.logger import log
+import requests
 
 # Main route
 @app.route('/')
@@ -133,7 +134,7 @@ def d_quick_add():
             url = userDetails['quickAddUrl']
             cur = mysql.connection.cursor()
             
-            
+
             return '', 204
         except Exception as e:
             log(op, "FailedDeleteJobHolder", str(e) + " " + s)
