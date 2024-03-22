@@ -143,27 +143,25 @@ def quick_add():
                 #Using beautiful soup to parse html file
                 soup = bs(content, "html.parser")
 
-                #soup.findAll finds all html headers 
+                #Retrieve info
                 titleTag = soup.findAll("span", class_="job-details-jobs-unified-top-card__job-title-link")
                 title = titleTag.contents[0]
 
                 company = soup.findAll("div", class_="job-details-jobs-unified-top-card__primary-description-container")
                 c = company.findAll("a", class_="app-aware-link ")
+                l = company.findAll("span",class_="white-space-pre")
                 companyName = c.contens[0]
+                location = l.contents[0]
+
 
                 cur = mysql.connection.cursor()
-                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, isMarked)"
+                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, notes, isMarked)"
                 s += " VALUES ("
                 s += str(session['user_id']).replace("'", "\\'") + ","
                 s += "'" + title.replace("'", "\\'") + "',"
                 s += "'" + companyName + "',"
-                s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
-                s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
-                s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
-                if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
-                    s += "NULL,"
-                else:
-                    s += "'" + str(userDetails['application_deadline_date']) + "',"
+                s += "'" + location.replace("'", "\\'") + "',"
+                s += "'" + url.replace("'", "\\'") + "',"
                 if userDetails['application_date'] == None or userDetails['application_date'] == "":
                     s += "NULL,"
                 else:
