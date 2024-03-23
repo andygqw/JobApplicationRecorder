@@ -169,9 +169,11 @@ def quick_add():
                 mysql.connection.commit()
                 cur.close()
                 log(op, session['username'], "Quick Add successfully: " + s)
-                return redirect(url_for('dashboard'))
+            else:
+                log(op, "FailedQuickAddHolder", "Failed to load page")
+            return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "FailedQuickAddHolder", str(e) + " " + s)
+            log(op, "FailedQuickAddHolder", str(e))
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
