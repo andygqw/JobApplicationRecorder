@@ -20,6 +20,12 @@ def dashboard():
 
             for job in jobs:
                 job['isMarked'] = str(int.from_bytes(job['isMarked'], 'big'))
+                if job['job_description'] == None:
+                    job['job_description'] = ""
+                if job['notes'] == None:
+                    job['notes'] = ""
+                if job['resume_version'] == None:
+                    job['resume_version'] = ""
 
             jobStatusOptions = ['Applied', 'Rejected', 'Gave up', 'Interviewing', 'Expired'] 
             return render_template('dashboard.html', username=session.get('username'),jobs = jobs, jobStatusOptions = jobStatusOptions)
