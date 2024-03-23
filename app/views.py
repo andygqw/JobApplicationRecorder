@@ -168,7 +168,7 @@ def quick_add():
                     location = (loc.contents[0]).strip()
 
                 cur = mysql.connection.cursor()
-                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, status)"
+                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, status, isMarked)"
                 s += " VALUES ("
                 s += str(session['user_id']).replace("'", "\\'") + ","
                 s += "'" + title.replace("'", "\\'") + "',"
@@ -176,13 +176,14 @@ def quick_add():
                 s += "'" + location.replace("'", "\\'") + "',"
                 s += "'" + url.replace("'", "\\'") + "',"
                 s += "'" + str(datetime.now()) + "',"
-                s += "'Applied');"
+                s += "'Applied', "
+                s += '0' + ");"
                 cur.execute(s)
                 mysql.connection.commit()
                 cur.close()
                 log(op, session['username'], "Quick Add successfully: " + s)
             else:
-                log(op, "FailedQuickAddHolder", "Failed to load page: " + response.headers)
+                log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code))
             return redirect(url_for('dashboard'))
         except Exception as e:
             log(op, "FailedQuickAddHolder", str(e))
