@@ -41,7 +41,7 @@
                     Add Job
                 </button>
                 <button type="button" class="btn btn-secondary m-1" id="quickAddButton">
-                    Quick Add
+                    QuickAdd
                 </button>
                 Total: {{ jobs|length }} applications
             </div>
@@ -253,10 +253,17 @@
             document.getElementById("jobModal").style.display = "block";
         }
         
-        var span = document.getElementsByClassName("close")[0];
-        span.onclick = function() {
-            document.getElementById("jobModal").style.display = "none";
-            documeny.getElementById("quickAddModal").style.display="none";
+        var closeButtons = document.getElementsByClassName("close");
+        var modals = document.getElementsByClassName("modal");
+
+        function closeAllModals() {
+            for (var i = 0; i < modals.length; i++) {
+                modals[i].style.display = "none";
+            }
+        }
+
+        for (var i = 0; i < closeButtons.length; i++) {
+            closeButtons[i].onclick = closeAllModals;
         }
 
         let itemIdToDelete = 0;

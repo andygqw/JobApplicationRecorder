@@ -4,6 +4,7 @@ from app.logger import log
 
 import requests
 from bs4 import BeautifulSoup as bs
+from datetime import datetime
 
 # Main route
 @app.route('/')
@@ -127,7 +128,7 @@ def delete_job(item_id):
     else:
         return '', 401
     
-@app.route('/quick_add', methods=['GET','POST'])
+@app.route('/quick_add', methods=['POST'])
 def quick_add():
     op = "quick_add"
     if session.get('logged_in'):
@@ -155,33 +156,25 @@ def quick_add():
 
 
                 cur = mysql.connection.cursor()
-                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, notes, isMarked)"
+                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, status)"
                 s += " VALUES ("
                 s += str(session['user_id']).replace("'", "\\'") + ","
                 s += "'" + title.replace("'", "\\'") + "',"
                 s += "'" + companyName + "',"
                 s += "'" + location.replace("'", "\\'") + "',"
                 s += "'" + url.replace("'", "\\'") + "',"
-                if userDetails['application_date'] == None or userDetails['application_date'] == "":
-                    s += "NULL,"
-                else:
-                    s += "'" + str(userDetails['application_date']) + "',"
-                s += "'" + userDetails['resume_version'] + "',"
-                s += "'" + userDetails['status'] + "',"
-                s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
-                s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
-                s += ");"
+                s += "'" + str(datetime.now()) + "',"
+                s += "'Applied');"
                 cur.execute(s)
                 mysql.connection.commit()
                 cur.close()
-                log(op, session['username'], "Job deleted succesfully " + s)
-
-            return '', 204
+                log(op, session['username'], "Quick Add successfully: " + s)
+                return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "FailedDeleteJobHolder", str(e) + " " + s)
-            return '', 400
+            log(op, "FailedQuickAddHolder", str(e) + " " + s)
+            return redirect(url_for('dashboard'))
     else:
-        return '', 401
+        return redirect(url_for('login'))
 
     
 def fetch_all_jobs_for_user(user_id):
