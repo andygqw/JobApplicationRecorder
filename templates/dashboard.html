@@ -43,7 +43,9 @@
                 <button type="button" class="btn btn-secondary m-1" id="quickAddButton">
                     QuikAdd
                 </button>
-                Total: {{ jobs|length }} applications
+                <span>Total: {{ jobs|length }} applications</span>
+                <span class="m-1">Applied: {{ applied_count }}</span>
+                <span class="m-1">Rejected: {{ rejected_count }}</span>
             </div>
             {% if jobs|length > 0 %}
             <table class="jobs-table">

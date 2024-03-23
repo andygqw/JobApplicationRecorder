@@ -26,9 +26,13 @@ def dashboard():
                     job['notes'] = ""
                 if job['resume_version'] == None:
                     job['resume_version'] = ""
+            applied_count = sum(1 for job in jobs if job['status'] == 'Applied')
+            rejected_count = sum(1 for job in jobs if job['status'] == 'Rejected')
 
             jobStatusOptions = ['Applied', 'Rejected', 'Gave up', 'Interviewing', 'Expired'] 
-            return render_template('dashboard.html', username=session.get('username'),jobs = jobs, jobStatusOptions = jobStatusOptions)
+            return render_template('dashboard.html', username=session.get('username'),
+                                        jobs = jobs, jobStatusOptions = jobStatusOptions,
+                                        applied_count=applied_count, rejected_count=rejected_count)
         else:
             return redirect(url_for('login'))
     except Exception as e:
