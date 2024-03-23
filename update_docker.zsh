@@ -3,8 +3,7 @@
 # Define variables
 IMAGE_NAME="flask_app"
 CONTAINER_NAME="JobApplicationManager"
-TAG="latest"
-PORTNUMBER = 5001
+PORTNUMBER=5001
 
 # Step 1: Stop the Docker container if it is running
 if docker ps | grep -q $CONTAINER_NAME; then
@@ -26,11 +25,11 @@ fi
 
 # Step 4: Build a new Docker image from Dockerfile
 echo "Building new image $IMAGE_NAME:$TAG..."
-docker build -t $IMAGE_NAME:$TAG
+docker build -t $IMAGE_NAME .
 
 # Step 5: Run a container from the new Docker image
 echo "Running new container $CONTAINER_NAME from image $IMAGE_NAME:$TAG..."
-docker run --name $CONTAINER_NAME -P $PORTNUMBER:$PORTNUMBER $IMAGE_NAME
+docker run --name $CONTAINER_NAME -p $PORTNUMBER:$PORTNUMBER $IMAGE_NAME
 
 # End of script
 echo "Script completed."
