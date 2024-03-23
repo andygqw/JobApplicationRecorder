@@ -306,10 +306,18 @@
             document.getElementById("quickAddModal").style.display = "block";
         });
 
+
         window.onclick = function(event) {
-            var modal = document.getElementById("jobModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
+            var jobModal = document.getElementById("jobModal");
+            var quickAddModal = document.getElementById("quickAddModal");
+            var deleteModal = document.getElementById('deleteModal');
+            if (event.target == jobModal) {
+                jobModal.style.display = "none";
+            }
+            else if (event.target == quickAddModal) {
+                quickAddModal.style.display = "none";
+            }else if (event.target == deleteModal){
+                cancelDelete();
             }
         }
     </script>
