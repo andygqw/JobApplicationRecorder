@@ -175,7 +175,13 @@
         document.addEventListener("DOMContentLoaded", function() {
             var rows = document.querySelectorAll(".jobs-table tbody tr");
             rows.forEach(row => {
-                row.addEventListener("click", function() {
+                row.addEventListener("click", function(event) {
+
+                    // Check if the click was on an anchor tag or any of its parents
+                    if (event.target.closest('a')) {
+                        // If the click is inside an anchor, do nothing (prevent modal)
+                        return;
+                    }
                     showDetails({
                         id: this.getAttribute('data-id'),
                         companyName: this.getAttribute('data-company-name'),
