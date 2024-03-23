@@ -135,25 +135,37 @@ def quick_add():
         try:
             userDetails = request.form
             url = userDetails['quickAddUrl']
+            headers = {
+                'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0'
+            }
 
-            response = requests.get(url)
+            response = requests.get(url, headers=headers)
+
+            titleClass = "top-card-layout__title font-sans text-lg papabear:text-xl font-bold leading-open text-color-text mb-0 topcard__title"
+            companyClass = "top-card-layout__second-subline font-sans text-sm leading-open text-color-text-low-emphasis mt-0.5"
+            companyNameClass = "topcard__org-name-link topcard__flavor--black-link"
+            companyLocClass = "topcard__flavor topcard__flavor--bullet"
+
             if response.ok:
 
                 content = response.text
 
-                #Using beautiful soup to parse html file
+                content = response.text
+
                 soup = bs(content, "html.parser")
 
-                #Retrieve info
-                titleTag = soup.findAll("span", class_="job-details-jobs-unified-top-card__job-title-link")
-                title = titleTag.contents[0]
+                titleTag = soup.find_all("h1", class_=titleClass)
+                title = ""
+                for t in titleTag:
+                    title = t.contents[0]
 
-                company = soup.findAll("div", class_="job-details-jobs-unified-top-card__primary-description-container")
-                c = company.findAll("a", class_="app-aware-link ")
-                l = company.findAll("span",class_="white-space-pre")
-                companyName = c.contens[0]
-                location = l.contents[0]
-
+                #company = soup.find_all("h4", class_=companyClass)
+                c = soup.find_all("a", class_=companyNameClass)
+                l = soup.find_all("span",class_=companyLocClass)
+                for name in c:
+                    companyName = (name.contents[0]).strip()
+                for loc in l:
+                    location = (loc.contents[0]).strip()
 
                 cur = mysql.connection.cursor()
                 s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, status)"
@@ -170,7 +182,7 @@ def quick_add():
                 cur.close()
                 log(op, session['username'], "Quick Add successfully: " + s)
             else:
-                log(op, "FailedQuickAddHolder", "Failed to load page")
+                log(op, "FailedQuickAddHolder", "Failed to load page: " + response.headers)
             return redirect(url_for('dashboard'))
         except Exception as e:
             log(op, "FailedQuickAddHolder", str(e))
