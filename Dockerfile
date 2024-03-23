@@ -7,6 +7,10 @@ WORKDIR /usr/src/jobapplicationmanager
 # Copy the current directory contents into the container at /usr/src/app
 COPY . .
 
+# Set the time zone to California time
+ENV TZ=America/Los_Angeles
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install any needed packages specified in requirements.txt
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN apt-get update -y
