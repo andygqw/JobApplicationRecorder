@@ -190,10 +190,8 @@ def quick_add():
                     s += "NULL, "
                     s += "NOW()"
                     s += ");"
-
                 else:
                     resumeVer = config['quickAddResumeVersion']
-
 
                 s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, isMarked)"
                 s += " VALUES ("

@@ -29,7 +29,7 @@ docker build -t $IMAGE_NAME .
 
 # Step 5: Run a container from the new Docker image
 echo "Running new container $CONTAINER_NAME from image $IMAGE_NAME: ..."
-docker run --name $CONTAINER_NAME -p $PORTNUMBER:$PORTNUMBER $IMAGE_NAME
+docker run --name $CONTAINER_NAME -p $PORTNUMBER:5000 $IMAGE_NAME
 
 # End of script
 echo "Script completed."

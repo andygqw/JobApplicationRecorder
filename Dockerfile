@@ -24,4 +24,4 @@ EXPOSE 5001
 #ENV NAME xxx
 
 # Run app.py when the container launches
-CMD ["python", "./run.py"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
