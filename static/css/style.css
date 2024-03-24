@@ -100,6 +100,10 @@ button:hover {
     background-color: #ffff99;
 }
 
+.rejected {
+    background-color: rgb(244, 122, 122);
+}
+
 .modal {
     display: none;
     position: fixed;

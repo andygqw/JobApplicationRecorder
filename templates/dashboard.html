@@ -75,7 +75,8 @@
                                 data-job-description="{{ job.job_description | escape }}"
                                 data-notes="{{ job.notes | escape }}"
                                 data-isMarked="{{ job.isMarked }}"
-                                class="{{ 'highlighted' if job.isMarked == '1' else '' }}">
+                                class="{{ 'rejected' if job.status in ['Rejected', 'Gave up'] else 'highlighted' if job.isMarked == '1' else '' }}">
+
                                 <td>{{ job.company_name }}</td>
                                 <td>{{ job.job_title }}</td>
                                 <td>{{ job.job_location }}</td>
