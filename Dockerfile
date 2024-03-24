@@ -18,10 +18,10 @@ RUN apt-get install -y python3-dev default-libmysqlclient-dev build-essential pk
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 5000 available to the world outside this container
-EXPOSE 5001
+#EXPOSE 5500
 
 # Define environment variable
 #ENV NAME xxx
 
 # Run app.py when the container launches
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "run.py"]
