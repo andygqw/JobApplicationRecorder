@@ -25,6 +25,17 @@ main {
     padding: 0px;
 }
 
+.dashboard-container {
+    margin: 20px;
+}
+.welcome-message {
+    margin-bottom: 20px;
+}
+textarea {
+    width: 500px;
+    height: 200px;
+}
+
 .welcome-section{
     padding-top: 50px;
     font-weight: bolder;
