@@ -18,15 +18,15 @@ def profile():
             # flash('Your profile has been updated.')
             return redirect(url_for('dashboard'))
         else:
-            user = get_profile_for_user(session["user_id"])
-            print(user)
-            return render_template('profile.html', user=user)  
+
+            u = get_profile_for_user(session['user_id'])
+            return render_template('profile.html', user = u)  
     else:
         return redirect(url_for('login'))
 
 def get_profile_for_user(user_id):
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM `Users` WHERE id = %s;", [user_id])
-    user = cur.fetchall()
+    user = cur.fetchone()
     cur.close()
     return user
