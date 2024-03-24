@@ -7,15 +7,20 @@ from app.logger import log
 def profile():
     if session.get('logged_in'):
         if request.method == 'POST':
-            # Process form data and update user profile
-            # Assume 'get_profile_for_user' and 'update_profile_for_user' are defined
-            # Retrieve profile based on current user's identification
-            # profile = get_profile_for_user(user_id)
-            # profile.username = request.form['username']
-            # profile.email = request.form['email']
-            # profile.bio = request.form['bio']
-            # profile.location = request.form['location']
-            # flash('Your profile has been updated.')
+
+            userDetails = request.form
+
+            s = "UPDATE Users SET "
+            s += "username = '" + userDetails['username'].replace("'", "\\'") + "', "
+            s += "email = '" + userDetails['email'].replace("'", "\\'")
+            s += "' WHERE id = " + str(session['user_id'])
+            s += ";"
+
+            cur = mysql.connection.cursor()
+            cur.execute(s)
+            mysql.connection.commit()
+            cur.close()
+
             return redirect(url_for('dashboard'))
         else:
 
