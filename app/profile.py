@@ -20,7 +20,8 @@ def profile():
         else:
 
             u = get_profile_for_user(session['user_id'])
-            return render_template('profile.html', user = u)  
+            c = get_config_for_user(session['user_id'])
+            return render_template('profile.html', user = u, config = c)  
     else:
         return redirect(url_for('login'))
 
@@ -30,3 +31,10 @@ def get_profile_for_user(user_id):
     user = cur.fetchone()
     cur.close()
     return user
+
+def get_config_for_user(user_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [user_id])
+    config = cur.fetchone()
+    cur.close()
+    return config
