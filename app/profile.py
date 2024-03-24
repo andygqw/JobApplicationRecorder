@@ -21,6 +21,8 @@ def profile():
             mysql.connection.commit()
             cur.close()
 
+            session['username'] = userDetails['username']
+
             return redirect(url_for('dashboard'))
         else:
 
