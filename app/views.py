@@ -178,7 +178,24 @@ def quick_add():
                     location = (loc.contents[0]).strip()
 
                 cur = mysql.connection.cursor()
-                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, status, isMarked)"
+
+                cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [session['user_id']])
+                config = cur.fetchone()
+
+                resumeVer = ""
+
+                if config == None:
+                    s = "INSERT INTO Config (user_id, quickAddResumeVersion, create_time) VALUES ("
+                    s += str(session['user_id']).replace("'", "\\'") + ","
+                    s += "NULL, "
+                    s += "NOW()"
+                    s += ");"
+
+                else:
+                    resumeVer = config['quickAddResumeVersion']
+
+
+                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, isMarked)"
                 s += " VALUES ("
                 s += str(session['user_id']).replace("'", "\\'") + ","
                 s += "'" + title.replace("'", "\\'") + "',"
@@ -186,6 +203,7 @@ def quick_add():
                 s += "'" + location.replace("'", "\\'") + "',"
                 s += "'" + url.replace("'", "\\'") + "',"
                 s += "'" + str(datetime.now()) + "',"
+                s += "'" + resumeVer + "',"
                 s += "'Applied', "
                 s += '0' + ");"
                 cur.execute(s)
