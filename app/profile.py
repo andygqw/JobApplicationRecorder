@@ -5,25 +5,30 @@ from app.logger import log
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
+    op = "Edit User"
     if session.get('logged_in'):
         if request.method == 'POST':
 
-            userDetails = request.form
+            try:
+                userDetails = request.form
 
-            s = "UPDATE Users SET "
-            s += "username = '" + userDetails['username'].replace("'", "\\'") + "', "
-            s += "email = '" + userDetails['email'].replace("'", "\\'")
-            s += "' WHERE id = " + str(session['user_id'])
-            s += ";"
+                s = "UPDATE Users SET "
+                s += "username = '" + userDetails['username'].replace("'", "\\'") + "', "
+                s += "email = '" + userDetails['email'].replace("'", "\\'")
+                s += "' WHERE id = " + str(session['user_id'])
+                s += ";"
 
-            cur = mysql.connection.cursor()
-            cur.execute(s)
-            mysql.connection.commit()
-            cur.close()
+                cur = mysql.connection.cursor()
+                cur.execute(s)
+                mysql.connection.commit()
+                cur.close()
 
-            session['username'] = userDetails['username']
+                session['username'] = userDetails['username']
 
-            return redirect(url_for('dashboard'))
+                log(op, session['username'], "User edited succesfully")
+                return redirect(url_for('profile'))
+            except Exception as e:
+                log(op, "FailedEditUserHolder", str(e))
         else:
 
             u = get_profile_for_user(session['user_id'])
