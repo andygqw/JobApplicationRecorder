@@ -16,7 +16,7 @@
 <body>
     <div class="edit-profile-container">
         <div class="welcome-message">
-            <h1>Edit Your Profile, {{ username }}</h1>
+            <h1>Edit Your Profile, {{ user.username }}</h1>
         </div>
         <form action="{{ url_for('update_profile') }}" method="POST">
             <div class="form-group">
