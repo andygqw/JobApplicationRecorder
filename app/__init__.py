@@ -22,4 +22,4 @@ app.secret_key = 'd#*$&^'
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-from app import views, auth
+from app import views, auth, profile

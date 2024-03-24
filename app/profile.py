@@ -4,7 +4,7 @@ from app.logger import log
 
 
 @app.route('/profile', methods=['GET', 'POST'])
-def edit_profile():
+def profile():
     if session.get('logged_in'):
         if request.method == 'POST':
             # Process form data and update user profile
@@ -19,6 +19,7 @@ def edit_profile():
             return redirect(url_for('dashboard'))
         else:
             user = get_profile_for_user(session["user_id"])
+            print(user)
             return render_template('profile.html', user=user)  
     else:
         return redirect(url_for('login'))
