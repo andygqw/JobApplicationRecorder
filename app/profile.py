@@ -14,8 +14,8 @@ def profile():
 
                 s = "UPDATE Users SET "
                 s += "username = '" + userDetails['username'].replace("'", "\\'") + "', "
-                s += "email = '" + userDetails['email'].replace("'", "\\'")
-                s += "' WHERE id = " + str(session['user_id'])
+                s += "email = '" + userDetails['email'].replace("'", "\\'") + "' "
+                s += "WHERE id = " + str(session['user_id'])
                 s += ";"
 
                 cur = mysql.connection.cursor()
@@ -34,6 +34,42 @@ def profile():
             u = get_profile_for_user(session['user_id'])
             c = get_config_for_user(session['user_id'])
             return render_template('profile.html', user = u, config = c)  
+    else:
+        return redirect(url_for('login'))
+    
+@app.route('/config', methods=['POST'])
+def config():
+    op = "Edit Config"
+    if session.get('logged_in'):
+        try:
+            userDetails = request.form
+
+            cur = mysql.connection.cursor()
+
+            cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [session['user_id']])
+            config = cur.fetchone()
+
+            if config == None:
+                s = "INSERT INTO Config (user_id, quickAddResumeVersion, create_time) VALUES ("
+                s += str(session['user_id']).replace("'", "\\'") + ","
+                s += "'" + userDetails['quickAddResumeVersion'].replace("'", "\\'") + "', "
+                s += "NOW()"
+                s += ");"
+            else:
+                s = "UPDATE Config SET "
+                s += "quickAddResumeVersion = '" + userDetails['quickAddResumeVersion'].replace("'", "\\'") + "' "
+                s += "WHERE user_id = " + str(session['user_id'])
+                s += ";"
+
+            cur.execute(s)
+            mysql.connection.commit()
+            cur.close()
+
+            log(op, session['username'], "Config edited succesfully")
+            return redirect(url_for('profile'))
+        except Exception as e:
+            log(op, "FailedEditConfigHolder", str(e))
+            return redirect(url_for('profile'))
     else:
         return redirect(url_for('login'))
 
