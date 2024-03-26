@@ -26,7 +26,7 @@ def dashboard():
                     job['notes'] = ""
                 if job['resume_version'] == None:
                     job['resume_version'] = ""
-            applied_count = sum(1 for job in jobs if job['status'] == 'Applied')
+            applied_count = sum(1 for job in jobs if job['status'] != 'Rejected')
             rejected_count = sum(1 for job in jobs if job['status'] == 'Rejected')
 
             jobStatusOptions = ['Applied', 'Viewed','Rejected', 'Gave up', 'Interviewing', 'Expired'] 
