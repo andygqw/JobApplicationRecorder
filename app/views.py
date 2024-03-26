@@ -29,7 +29,7 @@ def dashboard():
             applied_count = sum(1 for job in jobs if job['status'] == 'Applied')
             rejected_count = sum(1 for job in jobs if job['status'] == 'Rejected')
 
-            jobStatusOptions = ['Applied', 'Viewing','Rejected', 'Gave up', 'Interviewing', 'Expired'] 
+            jobStatusOptions = ['Applied', 'Viewed','Rejected', 'Gave up', 'Interviewing', 'Expired'] 
             return render_template('dashboard.html', username=session.get('username'),
                                         jobs = jobs, jobStatusOptions = jobStatusOptions,
                                         applied_count=applied_count, rejected_count=rejected_count)
