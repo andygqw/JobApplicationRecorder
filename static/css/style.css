@@ -115,6 +115,10 @@ button:hover {
     background-color: rgb(244, 122, 122);
 }
 
+.viewed {
+    background-color: rgb(135, 135, 235);
+}
+
 .modal {
     display: none;
     position: fixed;
