@@ -36,7 +36,7 @@ def dashboard():
         else:
             return redirect(url_for('login'))
     except Exception as e:
-        log("Dashboard", "FailedLoadHolder", str(e))
+        log("Dashboard", "FailedLoadHolder", str(e), False)
         return redirect(url_for('login'))
 
 @app.route('/editjob', methods=['POST'])
@@ -70,10 +70,10 @@ def edit_job():
 
             mysql.connection.commit()
             cur.close()
-            log(op, session['username'], "Job edited successfully " + s)
+            log(op, session['username'], "Job edited successfully ", True)
             return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "FailedEditJobHolder", str(e) + " " + s)
+            log(op, "FailedEditJobHolder", str(e) + " " + s, False)
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
@@ -112,10 +112,10 @@ def add_job():
 
             mysql.connection.commit()
             cur.close()
-            log(op, session['username'], "Job added successfully " + s)
+            log(op, session['username'], "Job added successfully ", True)
             return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "FailedAddJobHolder", str(e) + " " + s)
+            log(op, "FailedAddJobHolder", str(e) + " " + s, False)
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
@@ -130,10 +130,10 @@ def delete_job(item_id):
             cur.execute(s)
             mysql.connection.commit()
             cur.close()
-            log(op, session['username'], "Job deleted succesfully " + s)
+            log(op, session['username'], "Job deleted succesfully ", True)
             return '', 204
         except Exception as e:
-            log(op, "FailedDeleteJobHolder", str(e) + " " + s)
+            log(op, "FailedDeleteJobHolder", str(e), False)
             return '', 400
     else:
         return '', 401
@@ -207,12 +207,12 @@ def quick_add():
                 cur.execute(s)
                 mysql.connection.commit()
                 cur.close()
-                log(op, session['username'], "Quick Add successfully: " + s)
+                log(op, session['username'], "Quick Add successfully: ", True)
             else:
-                log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code))
+                log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
             return redirect(url_for('dashboard'))
         except Exception as e:
-            log(op, "FailedQuickAddHolder", str(e))
+            log(op, "FailedQuickAddHolder", str(e), False)
             return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))

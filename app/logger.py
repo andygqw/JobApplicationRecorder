@@ -2,9 +2,12 @@ from datetime import datetime
 from flask import flash
 from app import mysql
 
-def log(operation, user, notes):
+def log(operation, user, notes, category):
     if(operation != "" and operation != None):
-        flash(operation + ": " + notes)
+        if category:
+            flash(operation + ": " + notes, 'success')
+        else:
+            flash(operation + ": " + notes, 'error')
         cur = mysql.connection.cursor()
         result = cur.execute("SELECT id FROM `Users` WHERE username = %s", [user])
         if result > 0:

@@ -25,10 +25,10 @@ def profile():
 
                 session['username'] = userDetails['username']
 
-                log(op, session['username'], "User edited succesfully")
+                log(op, session['username'], "User edited succesfully", True)
                 return redirect(url_for('profile'))
             except Exception as e:
-                log(op, "FailedEditUserHolder", str(e))
+                log(op, "FailedEditUserHolder", str(e), False)
         else:
 
             u = get_profile_for_user(session['user_id'])
@@ -65,10 +65,10 @@ def config():
             mysql.connection.commit()
             cur.close()
 
-            log(op, session['username'], "Config edited succesfully")
+            log(op, session['username'], "Config edited succesfully", True)
             return redirect(url_for('profile'))
         except Exception as e:
-            log(op, "FailedEditConfigHolder", str(e))
+            log(op, "FailedEditConfigHolder", str(e), False)
             return redirect(url_for('profile'))
     else:
         return redirect(url_for('login'))

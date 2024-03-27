@@ -20,10 +20,10 @@ def register():
             cur.execute("INSERT INTO Users(username, email, password, registration_date) VALUES(%s, %s, %s, %s)",(username, email, hashed_password, datetime.now()))
             mysql.connection.commit()
             cur.close()            
-            log(op, username,"Registered successfully")
+            log(op, username,"Registered successfully",True)
             return redirect(url_for('login')) # login route
         except Exception as e:
-            log(op, "FailedRegisterHolder" , str(e))
+            log(op, "FailedRegisterHolder" , str(e), False)
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -43,7 +43,7 @@ def login():
                     session['logged_in'] = True
                     session['username'] = user_details['username']
                     session['user_id'] = user_details['id']
-                    log(op, session['username'],"Logged in successfully")
+                    log(op, session['username'],"Logged in successfully", True)
                     return redirect(url_for('dashboard'))
                 else:
                     # Password is wrong
@@ -51,7 +51,7 @@ def login():
             else:
                 raise Exception("User not found")
         except Exception as e:
-            log(op, "FailedLoginHolder", str(e))
+            log(op, "FailedLoginHolder", str(e), False)
     return render_template('login.html')
 
 @app.route('/logout')
@@ -59,8 +59,8 @@ def logout():
     try:
         name = session['username']
         session.clear()
-        log("Logout", name, "Logged out successfully")
+        log("Logout", name, "Logged out successfully", True)
         return redirect(url_for('home'))
     except Exception as e:
-        log("Logout", "FailedLogoutHolder", str(e))
+        log("Logout", "FailedLogoutHolder", str(e), False)
         return redirect(url_for('home'))
