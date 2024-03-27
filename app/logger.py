@@ -7,7 +7,7 @@ def log(operation, user, notes, category):
         if category:
             flash(operation + ": " + notes, 'success')
         else:
-            flash(operation + ": " + notes, 'error')
+            flash(operation + ": " + notes, 'danger')
         cur = mysql.connection.cursor()
         result = cur.execute("SELECT id FROM `Users` WHERE username = %s", [user])
         if result > 0:
