@@ -11,14 +11,16 @@
     <div class="dashboard-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div id="errorModal" class="modal" style="display: block;">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            {{ Message }}
+                <div id="errorModal" class="modal" style="display: block;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div class="m-1 p-3">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
                         </div>
                     </div>
-                {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
         <div class="welcome-message">
