@@ -4,6 +4,7 @@ from app import mysql
 
 def log(operation, user, notes):
     if(operation != "" and operation != None):
+        flash(operation + ": " + notes)
         cur = mysql.connection.cursor()
         result = cur.execute("SELECT id FROM `Users` WHERE username = %s", [user])
         if result > 0:
