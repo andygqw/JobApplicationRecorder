@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask import flash
 from app import mysql
 
 def log(operation, user, notes):
