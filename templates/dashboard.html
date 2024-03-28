@@ -322,6 +322,7 @@
             var jobModal = document.getElementById("jobModal");
             var quickAddModal = document.getElementById("quickAddModal");
             var deleteModal = document.getElementById('deleteModal');
+            var errorModal = document.getElementById('errorModal');
             if (event.target == jobModal){
                 jobModal.style.display = "none";
             }
@@ -329,6 +330,8 @@
                 quickAddModal.style.display = "none";
             }else if (event.target == deleteModal){
                 cancelDelete();
+            }else if(event.target == errorModal){
+                errorModal.style.display = "none";
             }
         }
     </script>
