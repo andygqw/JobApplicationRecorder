@@ -169,7 +169,6 @@ def quick_add():
                 for t in titleTag:
                     title = t.contents[0]
 
-                #company = soup.find_all("h4", class_=companyClass)
                 c = soup.find_all("a", class_=companyNameClass)
                 l = soup.find_all("span",class_=companyLocClass)
                 for name in c:
