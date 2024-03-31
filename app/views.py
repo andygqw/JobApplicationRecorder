@@ -160,8 +160,6 @@ def quick_add():
 
                 content = response.text
 
-                content = response.text
-
                 soup = bs(content, "html.parser")
 
                 titleTag = soup.find_all("h1", class_=titleClass)
