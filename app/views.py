@@ -34,7 +34,7 @@ def dashboard():
             return render_template('dashboard.html', username=session.get('username'),
                                         jobs = jobs, jobStatusOptions = jobStatusOptions,
                                         rejected_count=rejected_count,
-                                        rejected_rate=calculate_percentage(len(jobs),rejected_count))
+                                        rejected_rate=calculate_percentage(rejected_count, len(jobs)))
         else:
             return redirect(url_for('login'))
     except Exception as e:
