@@ -46,8 +46,8 @@
                     QuikAdd
                 </button>
                 <span>Total: {{ jobs|length }} applications</span>
-                <span class="m-1">Applied: {{ applied_count }}</span>
                 <span class="m-1">Rejected: {{ rejected_count }}</span>
+                <span class="m-1">Rejection Rate: {{ rejected_rate }}</span>
             </div>
             {% if jobs|length > 0 %}
             <table class="jobs-table">

@@ -26,13 +26,15 @@ def dashboard():
                     job['notes'] = ""
                 if job['resume_version'] == None:
                     job['resume_version'] = ""
-            applied_count = sum(1 for job in jobs if job['status'] != 'Rejected')
+
             rejected_count = sum(1 for job in jobs if job['status'] == 'Rejected')
+            rejected_rate = (len(jobs)/rejected_count)
 
             jobStatusOptions = ['Applied', 'Viewed','Rejected', 'Gave up', 'Interviewing', 'Expired'] 
             return render_template('dashboard.html', username=session.get('username'),
                                         jobs = jobs, jobStatusOptions = jobStatusOptions,
-                                        applied_count=applied_count, rejected_count=rejected_count)
+                                        rejected_count=rejected_count,
+                                        rejected_rate=calculate_percentage(len(jobs),rejected_count))
         else:
             return redirect(url_for('login'))
     except Exception as e:
@@ -221,3 +223,9 @@ def fetch_all_jobs_for_user(user_id):
     jobs = cur.fetchall()
     cur.close()
     return jobs
+
+def calculate_percentage(numerator, denominator):
+    if denominator == 0:
+        return "Denominator cannot be zero"
+    result = (numerator / denominator) * 100
+    return f"{result:.2f}%"
