@@ -51,48 +51,48 @@
             </div>
             {% if jobs|length > 0 %}
             <table class="jobs-table">
-                    <thead>
-                            <tr>
-                                <th>Company</th>
-                                <th>Job Title</th>
-                                <th>Location</th>
-                                <th>Date Applied</th>
-                                <th>Date Expire</th>
-                                <th>Status</th>
-                                <th>Job Link</th>
-                                <th></th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                        {% for job in jobs %}
-                            <tr data-id="{{ job.id }}"
-                                data-company-name="{{ job.company_name }}"
-                                data-job-title="{{ job.job_title }}"
-                                data-job-location="{{ job.job_location }}"
-                                data-application-date="{{ job.application_date }}"
-                                data-application-deadline="{{ job.application_deadline_date }}"
-                                data-status="{{ job.status }}"
-                                data-job-url="{{ job.job_url }}"
-                                data-resume-version="{{ job.resume_version }}"
-                                data-job-description="{{ job.job_description | escape }}"
-                                data-notes="{{ job.notes | escape }}"
-                                data-isMarked="{{ job.isMarked }}"
-                                class="{{ 'rejected' if job.status in ['Rejected', 'Gave up'] else 'highlighted' if job.isMarked == '1' else 'viewed' if job.status == 'Viewed' else '' }}">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Location</th>
+                        <th>Date Applied</th>
+                        <th>Date Expire</th>
+                        <th>Status</th>
+                        <th>Job Link</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                        <tr data-id="{{ job.id }}"
+                            data-company-name="{{ job.company_name }}"
+                            data-job-title="{{ job.job_title }}"
+                            data-job-location="{{ job.job_location }}"
+                            data-application-date="{{ job.application_date }}"
+                            data-application-deadline="{{ job.application_deadline_date }}"
+                            data-status="{{ job.status }}"
+                            data-job-url="{{ job.job_url }}"
+                            data-resume-version="{{ job.resume_version }}"
+                            data-job-description="{{ job.job_description | escape }}"
+                            data-notes="{{ job.notes | escape }}"
+                            data-isMarked="{{ job.isMarked }}"
+                            class="{{ 'rejected' if job.status in ['Rejected', 'Gave up'] else 'highlighted' if job.isMarked == '1' else 'viewed' if job.status == 'Viewed' else '' }}">
 
-                                <td>{{ job.company_name }}</td>
-                                <td>{{ job.job_title }}</td>
-                                <td>{{ job.job_location }}</td>
-                                <td>{{ job.application_date }}</td>
-                                <td>{{ job.application_deadline_date }}</td>
-                                <td>{{ job.status }}</td>
-                                <td>
-                                    {% if job.job_url != None and job.job_url != "" %}
-                                        <a href="{{ job.job_url }}">click here</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
+                            <td>{{ job.company_name }}</td>
+                            <td>{{ job.job_title }}</td>
+                            <td>{{ job.job_location }}</td>
+                            <td>{{ job.application_date }}</td>
+                            <td>{{ job.application_deadline_date }}</td>
+                            <td>{{ job.status }}</td>
+                            <td>
+                                {% if job.job_url != None and job.job_url != "" %}
+                                    <a href="{{ job.job_url }}">click here</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
             {% else %}
             <h4 class="mt-3">You do not have any job application yet, try add one.</h4>
