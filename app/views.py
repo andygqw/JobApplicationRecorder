@@ -2,7 +2,7 @@ from flask import render_template, session, redirect, url_for, request
 from app import app, mysql
 from app.logger import log
 
-import requests
+import requests, re
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 
@@ -184,13 +184,10 @@ def quick_add():
                     log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
 
             elif HANDSHAKE in url:
-                
+
                 response = requests.get(url, headers=headers)
 
-                titleClass = "top-card-layout__title font-sans text-lg papabear:text-xl font-bold leading-open text-color-text mb-0 topcard__title"
-                companyClass = "top-card-layout__second-subline font-sans text-sm leading-open text-color-text-low-emphasis mt-0.5"
-                companyNameClass = "topcard__org-name-link topcard__flavor--black-link"
-                companyLocClass = "topcard__flavor topcard__flavor--bullet"
+                titleClass = "/stu/employers"
 
                 if response.ok:
 
@@ -198,6 +195,11 @@ def quick_add():
 
                     soup = bs(content, "html.parser")
 
+
+                    def pattern(href):
+                        return href and re.compile("lacie").search(href)
+                    
+                    soup.find_all(href=not_lacie)
                     titleTag = soup.find_all("h1", class_=titleClass)
                     title = ""
                     for t in titleTag:
