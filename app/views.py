@@ -151,64 +151,98 @@ def quick_add():
                 'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0'
             }
 
-            response = requests.get(url, headers=headers)
+            LINKEDIN = "linkedin.com"
+            HANDSHAKE = "handshake.com"
 
-            titleClass = "top-card-layout__title font-sans text-lg papabear:text-xl font-bold leading-open text-color-text mb-0 topcard__title"
-            companyClass = "top-card-layout__second-subline font-sans text-sm leading-open text-color-text-low-emphasis mt-0.5"
-            companyNameClass = "topcard__org-name-link topcard__flavor--black-link"
-            companyLocClass = "topcard__flavor topcard__flavor--bullet"
+            if LINKEDIN in url:
 
-            if response.ok:
+                response = requests.get(url, headers=headers)
 
-                content = response.text
+                titleClass = "top-card-layout__title font-sans text-lg papabear:text-xl font-bold leading-open text-color-text mb-0 topcard__title"
+                companyClass = "top-card-layout__second-subline font-sans text-sm leading-open text-color-text-low-emphasis mt-0.5"
+                companyNameClass = "topcard__org-name-link topcard__flavor--black-link"
+                companyLocClass = "topcard__flavor topcard__flavor--bullet"
 
-                soup = bs(content, "html.parser")
+                if response.ok:
 
-                titleTag = soup.find_all("h1", class_=titleClass)
-                title = ""
-                for t in titleTag:
-                    title = t.contents[0]
+                    content = response.text
 
-                c = soup.find_all("a", class_=companyNameClass)
-                l = soup.find_all("span",class_=companyLocClass)
-                for name in c:
-                    companyName = (name.contents[0]).strip()
-                for loc in l:
-                    location = (loc.contents[0]).strip()
+                    soup = bs(content, "html.parser")
 
-                cur = mysql.connection.cursor()
+                    titleTag = soup.find_all("h1", class_=titleClass)
+                    title = ""
+                    for t in titleTag:
+                        title = t.contents[0]
 
-                cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [session['user_id']])
-                config = cur.fetchone()
-
-                resumeVer = ""
-
-                if config == None:
-                    s = "INSERT INTO Config (user_id, quickAddResumeVersion, create_time) VALUES ("
-                    s += str(session['user_id']).replace("'", "\\'") + ","
-                    s += "NULL, "
-                    s += "NOW()"
-                    s += ");"
+                    c = soup.find_all("a", class_=companyNameClass)
+                    l = soup.find_all("span",class_=companyLocClass)
+                    for name in c:
+                        companyName = (name.contents[0]).strip()
+                    for loc in l:
+                        location = (loc.contents[0]).strip()
                 else:
-                    resumeVer = config['quickAddResumeVersion']
+                    log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
 
-                s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, isMarked)"
-                s += " VALUES ("
+            elif HANDSHAKE in url:
+                
+                response = requests.get(url, headers=headers)
+
+                titleClass = "top-card-layout__title font-sans text-lg papabear:text-xl font-bold leading-open text-color-text mb-0 topcard__title"
+                companyClass = "top-card-layout__second-subline font-sans text-sm leading-open text-color-text-low-emphasis mt-0.5"
+                companyNameClass = "topcard__org-name-link topcard__flavor--black-link"
+                companyLocClass = "topcard__flavor topcard__flavor--bullet"
+
+                if response.ok:
+
+                    content = response.text
+
+                    soup = bs(content, "html.parser")
+
+                    titleTag = soup.find_all("h1", class_=titleClass)
+                    title = ""
+                    for t in titleTag:
+                        title = t.contents[0]
+
+                    c = soup.find_all("a", class_=companyNameClass)
+                    l = soup.find_all("span",class_=companyLocClass)
+                    for name in c:
+                        companyName = (name.contents[0]).strip()
+                    for loc in l:
+                        location = (loc.contents[0]).strip()
+                else:
+                    log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
+
+            cur = mysql.connection.cursor()
+
+            cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [session['user_id']])
+            config = cur.fetchone()
+
+            resumeVer = ""
+
+            if config == None:
+                s = "INSERT INTO Config (user_id, quickAddResumeVersion, create_time) VALUES ("
                 s += str(session['user_id']).replace("'", "\\'") + ","
-                s += "'" + title.replace("'", "\\'") + "',"
-                s += "'" + companyName + "',"
-                s += "'" + location.replace("'", "\\'") + "',"
-                s += "'" + url.replace("'", "\\'") + "',"
-                s += "'" + str(datetime.now()) + "',"
-                s += "'" + resumeVer + "',"
-                s += "'Applied', "
-                s += '0' + ");"
-                cur.execute(s)
-                mysql.connection.commit()
-                cur.close()
-                log(op, session['username'], "Quick Add successfully: ", True)
+                s += "NULL, "
+                s += "NOW()"
+                s += ");"
             else:
-                log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
+                resumeVer = config['quickAddResumeVersion']
+
+            s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, isMarked)"
+            s += " VALUES ("
+            s += str(session['user_id']).replace("'", "\\'") + ","
+            s += "'" + title.replace("'", "\\'") + "',"
+            s += "'" + companyName + "',"
+            s += "'" + location.replace("'", "\\'") + "',"
+            s += "'" + url.replace("'", "\\'") + "',"
+            s += "'" + str(datetime.now()) + "',"
+            s += "'" + resumeVer + "',"
+            s += "'Applied', "
+            s += '0' + ");"
+            cur.execute(s)
+            mysql.connection.commit()
+            cur.close()
+            log(op, session['username'], "Quick Add successfully: ", True)
             return redirect(url_for('dashboard'))
         except Exception as e:
             log(op, "FailedQuickAddHolder", str(e), False)
