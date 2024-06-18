@@ -30,7 +30,7 @@ def dashboard():
             rejected_count = sum(1 for job in jobs if job['status'] == 'Rejected')
             rejected_rate = (len(jobs)/rejected_count)
 
-            jobStatusOptions = ['Applied', 'Viewed','Rejected', 'Gave up', 'Interviewing', 'Expired'] 
+            jobStatusOptions = ['Applied', 'Viewed','Rejected', 'Gave up', 'Interviewing', 'Expired', 'Saved'] 
             return render_template('dashboard.html', username=session.get('username'),
                                         jobs = jobs, jobStatusOptions = jobStatusOptions,
                                         rejected_count=rejected_count,
@@ -197,20 +197,20 @@ def quick_add():
 
 
                     def pattern(href):
-                        return href and re.compile("lacie").search(href)
+                        return href and re.compile(titleClass).search(href)
                     
-                    soup.find_all(href=not_lacie)
-                    titleTag = soup.find_all("h1", class_=titleClass)
+                    titles = soup.find_all(href=pattern)
+                    companyName = ""
+                    for t in titles:
+                        companyName = t.contents[0]
+                    
+                    titleTag = soup.find_all("h1")
                     title = ""
                     for t in titleTag:
                         title = t.contents[0]
 
-                    c = soup.find_all("a", class_=companyNameClass)
-                    l = soup.find_all("span",class_=companyLocClass)
-                    for name in c:
-                        companyName = (name.contents[0]).strip()
-                    for loc in l:
-                        location = (loc.contents[0]).strip()
+                    location = ""
+                    
                 else:
                     log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
 
