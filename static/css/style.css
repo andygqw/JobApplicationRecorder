@@ -119,6 +119,10 @@ button:hover {
     background-color: rgb(135, 135, 235);
 }
 
+.saved {
+    background-color: rgb(251, 9, 199);
+}
+
 .modal {
     display: none;
     position: fixed;
