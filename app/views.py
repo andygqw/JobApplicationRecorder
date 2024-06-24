@@ -153,6 +153,11 @@ def quick_add():
 
             LINKEDIN = "linkedin.com"
             HANDSHAKE = "handshake.com"
+            INDEED = "indeed.com"
+
+            title = ""
+            companyName = ""
+            location = ""
 
             if LINKEDIN in url:
 
@@ -181,13 +186,16 @@ def quick_add():
                     for loc in l:
                         location = (loc.contents[0]).strip()
                 else:
-                    log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
+                    #log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
+                    raise Exception("Failed to load page: " + str(response.status_code))
 
-            elif HANDSHAKE in url:
+            elif INDEED in url:
 
                 response = requests.get(url, headers=headers)
 
-                titleClass = "/stu/employers"
+                titleClass = "jobsearch-JobInfoHeader-title"#h2
+                companyClass = "jobsearch-CompanyInfoContainer"#div
+                locationClass= "inlineHeader-companyLocation"#div
 
                 if response.ok:
 
@@ -195,24 +203,26 @@ def quick_add():
 
                     soup = bs(content, "html.parser")
 
+                    # Find all h2 elements with the specified class
+                    h2_elements = soup.find_all('h2', class_= titleClass)
 
-                    def pattern(href):
-                        return href and re.compile(titleClass).search(href)
+                    for h2 in h2_elements:
+                        span = h2.find('span')
+                        if span:
+                            title = span.text
                     
-                    titles = soup.find_all(href=pattern)
-                    companyName = ""
-                    for t in titles:
-                        companyName = t.contents[0]
-                    
-                    titleTag = soup.find_all("h1")
-                    title = ""
-                    for t in titleTag:
-                        title = t.contents[0]
-
-                    location = ""
+                    div_elements = soup.find_all('div', class_= companyClass)
+                    for div in div_elements:
+                        a_tag = div.find('a')
+                        if a_tag:
+                            companyName = a_tag.text
+                        loc = div.find(class_=locationClass)
+                        if loc:
+                            location = loc.text                       
                     
                 else:
-                    log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
+                    #log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
+                    raise Exception("Failed to load page: " + str(response.status_code))
 
             cur = mysql.connection.cursor()
 
