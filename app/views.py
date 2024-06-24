@@ -186,11 +186,19 @@ def quick_add():
                     for loc in l:
                         location = (loc.contents[0]).strip()
                 else:
-                    #log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
                     raise Exception("Failed to load page: " + str(response.status_code))
 
             elif INDEED in url:
 
+                headers = {
+                    'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+                    'Priority':'i',
+                    'Referer':'www.indeed.com',
+                    'Accept':'text/html, application/xhtml+xml, image/jxr, */*',
+                    'Accept-Language':'en-US,en;q=0.8',
+                    'Cache-Control':'no-cache',
+                    'authority':'t.indeed.com'
+                }
                 response = requests.get(url, headers=headers)
 
                 titleClass = "jobsearch-JobInfoHeader-title"#h2
@@ -200,6 +208,7 @@ def quick_add():
                 if response.ok:
 
                     content = response.text
+                    print(content)
 
                     soup = bs(content, "html.parser")
 
@@ -221,7 +230,6 @@ def quick_add():
                             location = loc.text                       
                     
                 else:
-                    #log(op, "FailedQuickAddHolder", "Failed to load page: " + str(response.status_code), False)
                     raise Exception("Failed to load page: " + str(response.status_code))
 
             cur = mysql.connection.cursor()
