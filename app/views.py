@@ -89,34 +89,34 @@ def add_job():
     if session.get('logged_in'):
         try:
             userDetails = request.form
-            cur = mysql.connection.cursor()
+            # cur = mysql.connection.cursor()
 
-            s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, isMarked)"
-            s += " VALUES ("
-            s += str(session['user_id']).replace("'", "\\'") + ","
-            s += "'" + userDetails['job_title'].replace("'", "\\'") + "',"
-            s += "'" + userDetails['company_name'].replace("'", "\\'") + "',"
-            s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
-            s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
-            s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
-            if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
-                s += "NULL,"
-            else:
-                s += "'" + str(userDetails['application_deadline_date']) + "',"
-            if userDetails['application_date'] == None or userDetails['application_date'] == "":
-                s += "NULL,"
-            else:
-                s += "'" + str(userDetails['application_date']) + "',"
-            s += "'" + userDetails['resume_version'] + "',"
-            s += "'" + userDetails['status'] + "',"
-            s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
-            s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
-            s += ");"
+            # s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, isMarked)"
+            # s += " VALUES ("
+            # s += str(session['user_id']).replace("'", "\\'") + ","
+            # s += "'" + userDetails['job_title'].replace("'", "\\'") + "',"
+            # s += "'" + userDetails['company_name'].replace("'", "\\'") + "',"
+            # s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
+            # s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
+            # s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
+            # if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
+            #     s += "NULL,"
+            # else:
+            #     s += "'" + str(userDetails['application_deadline_date']) + "',"
+            # if userDetails['application_date'] == None or userDetails['application_date'] == "":
+            #     s += "NULL,"
+            # else:
+            #     s += "'" + str(userDetails['application_date']) + "',"
+            # s += "'" + userDetails['resume_version'] + "',"
+            # s += "'" + userDetails['status'] + "',"
+            # s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
+            # s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
+            # s += ");"
 
-            cur.execute(s)
+            # cur.execute(s)
 
-            mysql.connection.commit()
-            cur.close()
+            # mysql.connection.commit()
+            # cur.close()
             log(op, session['username'], "Job added successfully ", True)
             return redirect(url_for('dashboard'))
         except Exception as e:
@@ -283,19 +283,12 @@ def quick_add():
 
 def fetch_all_jobs_for_user(user_id):
 
-    load_dotenv()
-    url = f"https://api.cloudflare.com/client/v4/accounts/{os.getenv('CF_ACCOUNT_ID')}/d1/database/{os.getenv('CF_DATABASE_ID')}/raw"
-
     payload = {
         "params": [user_id],
         "sql": "SELECT * FROM job_applications WHERE user_id = ? ORDER BY application_date DESC;"
     }
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {os.getenv('CF_DATABASE_TOKEN')}"
-    }
-
-    response = requests.request("POST", url, json=payload, headers=headers)
+    
+    response = make_request(payload)
     if response.ok:
 
         data = response.json()
@@ -310,6 +303,16 @@ def fetch_all_jobs_for_user(user_id):
     else:
         raise Exception("Failed to retrieve data: " + str(response.status_code))
 
+def make_request(payload):
+    load_dotenv()
+    url = f"https://api.cloudflare.com/client/v4/accounts/{os.getenv('CF_ACCOUNT_ID')}/d1/database/{os.getenv('CF_DATABASE_ID')}/raw"
+    
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.getenv('CF_DATABASE_TOKEN')}"
+    }
+
+    return requests.request("POST", url, json=payload, headers=headers)
 
 def calculate_percentage(numerator, denominator):
     if denominator == 0:
