@@ -1,8 +1,8 @@
-from flask import render_template, session, redirect, url_for, request, jsonify
+from flask import render_template, session, redirect, url_for, request
 from app import app
 from app.logger import log
 
-import requests, re
+import requests
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 
@@ -31,7 +31,6 @@ def dashboard():
                     job['resume_version'] = ""
 
             rejected_count = sum(1 for job in jobs if job['status'] == 'Rejected')
-            rejected_rate = (len(jobs)/rejected_count)
 
             jobStatusOptions = ['Applied', 'Viewed','Rejected', 'Gave up', 'Interviewing', 'Expired', 'Saved'] 
             return render_template('dashboard.html', username=session.get('username'),
@@ -373,6 +372,6 @@ def make_request_by_query(query):
 
 def calculate_percentage(numerator, denominator):
     if denominator == 0:
-        return "Denominator cannot be zero"
+        return 0
     result = (numerator / denominator) * 100
     return f"{result:.2f}%"
