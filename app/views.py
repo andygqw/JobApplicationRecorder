@@ -22,7 +22,7 @@ def dashboard():
             jobs = fetch_all_jobs_for_user(session['user_id'])
 
             for job in jobs:
-                job['isMarked'] = str(int.from_bytes(job['isMarked'], 'big'))
+                #job['is_marked'] = str(int.from_bytes(job['is_marked'], 'big'))
                 if job['job_description'] == None:
                     job['job_description'] = ""
                 if job['notes'] == None:
@@ -288,7 +288,7 @@ def fetch_all_jobs_for_user(user_id):
 
     payload = {
         "params": [user_id],
-        "sql": "SELECT * FROM job_applications WHERE user_id = ? AND id = 15;"
+        "sql": "SELECT * FROM job_applications WHERE user_id = ? ORDER BY application_date DESC;"
     }
     headers = {
         "Content-Type": "application/json",
@@ -296,8 +296,20 @@ def fetch_all_jobs_for_user(user_id):
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
-    print(response)
-    print(response.text)
+    if response.ok:
+
+        data = response.json()
+    
+        job_list = []
+        rows = data['result'][0]['results']['rows']
+        columns = data['result'][0]['results']['columns']
+        for row in rows:
+            job = {columns[i]: row[i] for i in range(len(columns))}
+            job_list.append(job)
+        return job_list
+    else:
+        raise Exception("Failed to retrieve data: " + str(response.status_code))
+
 
 def calculate_percentage(numerator, denominator):
     if denominator == 0:
