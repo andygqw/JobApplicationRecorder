@@ -219,54 +219,71 @@ def quick_add():
                 else:
                     raise Exception("Failed to load page: " + str(response.status_code))
 
-            elif INDEED in url:
+            # elif INDEED in url:
 
-                headers = {
-                    'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
-                    'Priority':'i',
-                    'Referer':'www.indeed.com',
-                    'Accept':'text/html, application/xhtml+xml, image/jxr, */*',
-                    'Accept-Language':'en-US,en;q=0.8',
-                    'Cache-Control':'no-cache',
-                    'authority':'t.indeed.com'
-                }
-                response = requests.get(url, headers=headers)
+            #     headers = {
+            #         'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0',
+            #         'Priority':'i',
+            #         'Referer':'www.indeed.com',
+            #         'Accept':'text/html, application/xhtml+xml, image/jxr, */*',
+            #         'Accept-Language':'en-US,en;q=0.8',
+            #         'Cache-Control':'no-cache',
+            #         'authority':'t.indeed.com'
+            #     }
+            #     response = requests.get(url, headers=headers)
 
-                titleClass = "jobsearch-JobInfoHeader-title"#h2
-                companyClass = "jobsearch-CompanyInfoContainer"#div
-                locationClass= "inlineHeader-companyLocation"#div
+            #     titleClass = "jobsearch-JobInfoHeader-title"#h2
+            #     companyClass = "jobsearch-CompanyInfoContainer"#div
+            #     locationClass= "inlineHeader-companyLocation"#div
 
-                if response.ok:
+            #     if response.ok:
 
-                    content = response.text
-                    print(content)
+            #         content = response.text
+            #         print(content)
 
-                    soup = bs(content, "html.parser")
+            #         soup = bs(content, "html.parser")
 
-                    # Find all h2 elements with the specified class
-                    h2_elements = soup.find_all('h2', class_= titleClass)
+            #         # Find all h2 elements with the specified class
+            #         h2_elements = soup.find_all('h2', class_= titleClass)
 
-                    for h2 in h2_elements:
-                        span = h2.find('span')
-                        if span:
-                            title = span.text
+            #         for h2 in h2_elements:
+            #             span = h2.find('span')
+            #             if span:
+            #                 title = span.text
                     
-                    div_elements = soup.find_all('div', class_= companyClass)
-                    for div in div_elements:
-                        a_tag = div.find('a')
-                        if a_tag:
-                            companyName = a_tag.text
-                        loc = div.find(class_=locationClass)
-                        if loc:
-                            location = loc.text                       
+            #         div_elements = soup.find_all('div', class_= companyClass)
+            #         for div in div_elements:
+            #             a_tag = div.find('a')
+            #             if a_tag:
+            #                 companyName = a_tag.text
+            #             loc = div.find(class_=locationClass)
+            #             if loc:
+            #                 location = loc.text                       
                     
-                else:
-                    raise Exception("Failed to load page: " + str(response.status_code))
+            #     else:
+            #         raise Exception("Failed to load page: " + str(response.status_code))
 
-            cur = mysql.connection.cursor()
+            # cur = mysql.connection.cursor()
 
-            cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [session['user_id']])
-            config = cur.fetchone()
+            # cur.execute("SELECT * FROM `Config` WHERE user_id = %s;", [session['user_id']])
+            # config = cur.fetchone()
+            else:
+                raise Exception("Unsupported site")
+            
+            response = make_request_by_query(f"SELECT * FROM `config` WHERE user_id = {session['user_id']};")
+            if(response.ok):
+
+                data = response.json()
+    
+                config = []
+                rows = data['result'][0]['results']['rows']
+                columns = data['result'][0]['results']['columns']
+                for row in rows:
+                    c = {columns[i]: row[i] for i in range(len(columns))}
+                    config.append(c)
+                
+            else:
+                raise Exception(response.text)
 
             resumeVer = ""
 
@@ -276,25 +293,33 @@ def quick_add():
                 s += "NULL, "
                 s += "NOW()"
                 s += ");"
+                response = make_request_by_query(s)
+                if not response.ok:
+                    raise Exception(response.text)
             else:
-                resumeVer = config['quickAddResumeVersion']
+                resumeVer = config[0]['quickAddResumeVersion']
 
-            s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, isMarked)"
+            s = "INSERT INTO job_applications (user_id, job_title, company_name, job_location, job_url, application_date, resume_version, status, is_marked)"
             s += " VALUES ("
             s += str(session['user_id']).replace("'", "\\'") + ","
             s += "'" + title.replace("'", "\\'") + "',"
             s += "'" + companyName + "',"
             s += "'" + location.replace("'", "\\'") + "',"
             s += "'" + url.replace("'", "\\'") + "',"
-            s += "'" + str(datetime.now()) + "',"
+            s += "'" + str(datetime.now().strftime('%Y-%m-%d')) + "',"
             s += "'" + resumeVer + "',"
             s += "'Applied', "
             s += '0' + ");"
-            cur.execute(s)
-            mysql.connection.commit()
-            cur.close()
-            log(op, session['username'], "Quick Add successfully: ", True)
-            return redirect(url_for('dashboard'))
+            # cur.execute(s)
+            # mysql.connection.commit()
+            # cur.close()
+            response = make_request_by_query(s)
+            if response.ok:
+                log(op, session['username'], "Quick Add successfully: " + title, True)
+                return redirect(url_for('dashboard'))
+            else:
+                raise Exception(response.text)
+            
         except Exception as e:
             log(op, "FailedQuickAddHolder", str(e), False)
             return redirect(url_for('dashboard'))
@@ -334,6 +359,21 @@ def fetch_all_jobs_for_user(user_id):
 def make_request(payload):
     load_dotenv()
     url = f"https://api.cloudflare.com/client/v4/accounts/{os.getenv('CF_ACCOUNT_ID')}/d1/database/{os.getenv('CF_DATABASE_ID')}/raw"
+    
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.getenv('CF_DATABASE_TOKEN')}"
+    }
+
+    return requests.request("POST", url, json=payload, headers=headers)
+
+def make_request_by_query(query):
+    url = f"https://api.cloudflare.com/client/v4/accounts/{os.getenv('CF_ACCOUNT_ID')}/d1/database/{os.getenv('CF_DATABASE_ID')}/raw"
+
+    payload = {
+        "params": [],
+        "sql": query
+    }
     
     headers = {
         "Content-Type": "application/json",
