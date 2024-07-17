@@ -8,6 +8,7 @@ __pycache__/
 
 # Mac OS FS
 .DS_Store
+__init__.py
 
 # Distribution / packaging
 .Python
