@@ -140,13 +140,21 @@ def delete_job(item_id):
     op = "Delete job"
     if session.get('logged_in'):
         try:
-            cur = mysql.connection.cursor()
-            s = "DELETE FROM JobApplications WHERE id = " + str(item_id) + ";"
-            cur.execute(s)
-            mysql.connection.commit()
-            cur.close()
-            log(op, session['username'], "Job deleted succesfully ", True)
-            return '', 204
+            # cur = mysql.connection.cursor()
+            s = "DELETE FROM job_applications WHERE id = " + str(item_id) + ";"
+            # cur.execute(s)
+            # mysql.connection.commit()
+            # cur.close()
+            payload = {
+                "params": [],
+                "sql": s
+            }
+            response = make_request(payload)
+            if(response.ok):
+                log(op, session['username'], "Job deleted succesfully ", True)
+                return '', 204
+            else:
+                raise Exception(response.text)
         except Exception as e:
             log(op, "FailedDeleteJobHolder", str(e), False)
             return '', 400
