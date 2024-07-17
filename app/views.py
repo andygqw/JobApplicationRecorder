@@ -91,34 +91,44 @@ def add_job():
             userDetails = request.form
             # cur = mysql.connection.cursor()
 
-            # s = "INSERT INTO JobApplications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, isMarked)"
-            # s += " VALUES ("
-            # s += str(session['user_id']).replace("'", "\\'") + ","
-            # s += "'" + userDetails['job_title'].replace("'", "\\'") + "',"
-            # s += "'" + userDetails['company_name'].replace("'", "\\'") + "',"
-            # s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
-            # s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
-            # s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
-            # if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
-            #     s += "NULL,"
-            # else:
-            #     s += "'" + str(userDetails['application_deadline_date']) + "',"
-            # if userDetails['application_date'] == None or userDetails['application_date'] == "":
-            #     s += "NULL,"
-            # else:
-            #     s += "'" + str(userDetails['application_date']) + "',"
-            # s += "'" + userDetails['resume_version'] + "',"
-            # s += "'" + userDetails['status'] + "',"
-            # s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
-            # s += ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
-            # s += ");"
+            s = "INSERT INTO job_applications (user_id, job_title, company_name, job_description, job_location, job_url, application_deadline_date, application_date, resume_version, status, notes, is_marked)"
+            s += " VALUES ("
+            s += str(session['user_id']).replace("'", "\\'") + ","
+            s += "'" + userDetails['job_title'].replace("'", "\\'") + "',"
+            s += "'" + userDetails['company_name'].replace("'", "\\'") + "',"
+            s += "'" + str(userDetails['job_description']).replace("'", "\\'") + "',"
+            s += "'" + userDetails['job_location'].replace("'", "\\'") + "',"
+            s += "'" + userDetails['job_url'].replace("'", "\\'") + "',"
+            if userDetails['application_deadline_date'] == None or userDetails['application_deadline_date'] == "":
+                s += "NULL,"
+            else:
+                s += "'" + str(userDetails['application_deadline_date']) + "',"
+            if userDetails['application_date'] == None or userDetails['application_date'] == "":
+                s += "NULL,"
+            else:
+                s += "'" + str(userDetails['application_date']) + "',"
+            s += "'" + userDetails['resume_version'] + "',"
+            s += "'" + userDetails['status'] + "',"
+            s += "'" + userDetails['notes'].replace("'", "\\'") + "',"
+            s += ('1' if 'is_marked' in userDetails and userDetails['is_marked'] == 'on' else '0')
+            s += ");"
 
             # cur.execute(s)
 
             # mysql.connection.commit()
             # cur.close()
-            log(op, session['username'], "Job added successfully ", True)
-            return redirect(url_for('dashboard'))
+            payload = {
+                "params": [],
+                "sql": s
+            }
+
+            response = make_request(payload)
+            if(response.ok):
+                log(op, session['username'], "Job added successfully ", True)
+                return redirect(url_for('dashboard'))
+            else:
+                raise Exception(response.text)
+            
         except Exception as e:
             log(op, "FailedAddJobHolder", str(e) + " " + s, False)
             return redirect(url_for('dashboard'))
