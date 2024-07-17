@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 
 # Define variables
-IMAGE_NAME="flask_app"
-CONTAINER_NAME="JobApplicationManager"
+IMAGE_NAME="job_application_d1"
+CONTAINER_NAME="job_application_d1"
 PORTNUMBER=5500
 
 # Step 1: Stop the Docker container if it is running

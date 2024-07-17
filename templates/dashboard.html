@@ -175,6 +175,8 @@
         </div>
     </div>
 
+    <div id="loading-overlay">Loading...</div>
+
     <script>
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -301,13 +303,15 @@
         }
 
         document.getElementById('deleteConfirm').addEventListener('click', function() {
+            closeAllModals();
+            showLoading();
             fetch(`/delete_job/${itemIdToDelete}`, { method: 'POST' })
             .then(response => {
                 if (response.ok) {
                     $('#deleteModal').modal('hide');
                     window.location.reload();
-                } else {
-                    alert('Error deleting item');
+                }else{
+                    hideLoading();
                 }
             });
         });
@@ -333,6 +337,35 @@
             }else if(event.target == errorModal){
                 errorModal.style.display = "none";
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function () {
+                    closeAllModals();
+                    showLoading();
+                });
+            });
+
+            window.addEventListener('unload', function () {
+                closeAllModals();
+                showLoading();
+            });
+        });
+
+        document.addEventListener('readystatechange', function () {
+            if (document.readyState === 'complete') {
+                hideLoading();
+            }
+        });
+
+        function showLoading() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').style.display = 'none';
         }
     </script>
 
