@@ -51,9 +51,9 @@ def edit_job():
         try:
             userDetails = request.form
 
-            cur = mysql.connection.cursor()
+            # cur = mysql.connection.cursor()
 
-            s = "UPDATE JobApplications SET job_title = '" + userDetails['job_title'].replace("'", "\\'") + "', "
+            s = "UPDATE job_applications SET job_title = '" + userDetails['job_title'].replace("'", "\\'") + "', "
             s += "company_name = '" + userDetails['company_name'].replace("'", "\\'") + "', "
             s += "job_description = '" + userDetails['job_description'].replace("'", "\\'") + "', "
             s += "job_location = '" + userDetails['job_location'].replace("'", "\\'") + "', "
@@ -69,14 +69,24 @@ def edit_job():
             s += "resume_version = '" + userDetails['resume_version'] + "', "
             s += "status = '" + userDetails['status'] + "', "
             s += "notes = '" + userDetails['notes'].replace("'", "\\'") + "', "
-            s += "isMarked = " + ('1' if 'isMarked' in userDetails and userDetails['isMarked'] == 'on' else '0')
+            s += "is_marked = " + ('1' if 'is_marked' in userDetails and userDetails['is_marked'] == 'on' else '0')
             s += " WHERE id = " + userDetails['id'] + ";"
-            cur.execute(s)
+            # cur.execute(s)
 
-            mysql.connection.commit()
-            cur.close()
-            log(op, session['username'], "Job edited successfully ", True)
-            return redirect(url_for('dashboard'))
+            # mysql.connection.commit()
+            # cur.close()
+            payload = {
+                "params": [],
+                "sql": s
+            }
+
+            response = make_request(payload)
+            if(response.ok):
+                log(op, session['username'], "Job edited successfully ", True)
+                return redirect(url_for('dashboard'))
+            else:
+                raise Exception(response.text)
+            
         except Exception as e:
             log(op, "FailedEditJobHolder", str(e) + " " + s, False)
             return redirect(url_for('dashboard'))
