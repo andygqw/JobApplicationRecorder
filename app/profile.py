@@ -1,5 +1,5 @@
 from flask import render_template, session, redirect, url_for, request
-from app import app, mysql, views
+from app import app, views
 from app.logger import log
 
 
@@ -103,7 +103,6 @@ def get_profile_for_user(user_id):
     response = views.make_request_by_query(f"SELECT * FROM `users` WHERE id = {user_id};")
     if response.ok:
         data = response.json()
-        users = []
         rows = data['result'][0]['results']['rows']
         columns = data['result'][0]['results']['columns']
         for row in rows:
@@ -122,7 +121,6 @@ def get_config_for_user(user_id):
     response = views.make_request_by_query(f"SELECT * FROM `config` WHERE user_id = {user_id};")
     if response.ok:
         data = response.json()
-        configs = []
         rows = data['result'][0]['results']['rows']
         columns = data['result'][0]['results']['columns']
         for row in rows:
