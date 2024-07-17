@@ -204,6 +204,8 @@ def quick_add():
                         companyName = (name.contents[0]).strip()
                     for loc in l:
                         location = (loc.contents[0]).strip()
+                elif response.status_code == 429:
+                    raise Exception("Requests too busy, try again later")
                 else:
                     raise Exception("Failed to load page: " + str(response.status_code))
 
