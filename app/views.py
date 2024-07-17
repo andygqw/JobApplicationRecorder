@@ -1,5 +1,5 @@
 from flask import render_template, session, redirect, url_for, request, jsonify
-from app import app, mysql
+from app import app
 from app.logger import log
 
 import requests, re
@@ -75,12 +75,8 @@ def edit_job():
 
             # mysql.connection.commit()
             # cur.close()
-            payload = {
-                "params": [],
-                "sql": s
-            }
 
-            response = make_request(payload)
+            response = make_request_by_query(s)
             if(response.ok):
                 log(op, session['username'], "Job edited successfully ", True)
                 return redirect(url_for('dashboard'))
@@ -127,12 +123,8 @@ def add_job():
 
             # mysql.connection.commit()
             # cur.close()
-            payload = {
-                "params": [],
-                "sql": s
-            }
 
-            response = make_request(payload)
+            response = make_request_by_query(s)
             if(response.ok):
                 log(op, session['username'], "Job added successfully ", True)
                 return redirect(url_for('dashboard'))
@@ -155,11 +147,8 @@ def delete_job(item_id):
             # cur.execute(s)
             # mysql.connection.commit()
             # cur.close()
-            payload = {
-                "params": [],
-                "sql": s
-            }
-            response = make_request(payload)
+
+            response = make_request_by_query(s)
             if(response.ok):
                 log(op, session['username'], "Job deleted succesfully ", True)
                 return '', 204
