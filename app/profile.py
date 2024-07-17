@@ -1,6 +1,7 @@
 from flask import render_template, session, redirect, url_for, request
 from app import app, views
 from app.logger import log
+from datetime import datetime
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -127,5 +128,12 @@ def get_config_for_user(user_id):
             config = {columns[i]: row[i] for i in range(len(columns))}
     else:
         raise Exception(response.text)
-
+    
+    if len(rows) == 0:
+        response = views.make_request_by_query(f"INSERT INTO `config` (user_id, quickAddResumeVersion, create_time) VALUES ({user_id}, '', \'{datetime.now().strftime('%Y-%m-%d')}\');")
+        if response.ok:
+            return ''
+        else:
+            raise Exception(response.text)
+        
     return config
