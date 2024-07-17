@@ -1,10 +1,13 @@
-from flask import render_template, session, redirect, url_for, request
+from flask import render_template, session, redirect, url_for, request, jsonify
 from app import app, mysql
 from app.logger import log
 
 import requests, re
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
+
+from dotenv import load_dotenv
+import os
 
 # Main route
 @app.route('/')
@@ -271,12 +274,30 @@ def quick_add():
         return redirect(url_for('login'))
 
     
+# def fetch_all_jobs_for_user(user_id):
+#     cur = mysql.connection.cursor()
+#     cur.execute("SELECT * FROM `JobApplications` WHERE user_id = %s ORDER BY application_date DESC, id DESC", [user_id])
+#     jobs = cur.fetchall()
+#     cur.close()
+#     return jobs
+
 def fetch_all_jobs_for_user(user_id):
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM `JobApplications` WHERE user_id = %s ORDER BY application_date DESC, id DESC", [user_id])
-    jobs = cur.fetchall()
-    cur.close()
-    return jobs
+
+    load_dotenv()
+    url = f"https://api.cloudflare.com/client/v4/accounts/{os.getenv('CF_ACCOUNT_ID')}/d1/database/{os.getenv('CF_DATABASE_ID')}/raw"
+
+    payload = {
+        "params": [user_id],
+        "sql": "SELECT * FROM job_applications WHERE user_id = ? AND id = 15;"
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.getenv('CF_DATABASE_TOKEN')}"
+    }
+
+    response = requests.request("POST", url, json=payload, headers=headers)
+    print(response)
+    print(response.text)
 
 def calculate_percentage(numerator, denominator):
     if denominator == 0:
