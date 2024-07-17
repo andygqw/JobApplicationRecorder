@@ -303,7 +303,7 @@ def fetch_all_jobs_for_user(user_id):
 
     payload = {
         "params": [user_id],
-        "sql": "SELECT * FROM job_applications WHERE user_id = ? ORDER BY application_date DESC;"
+        "sql": "SELECT * FROM job_applications WHERE user_id = ? ORDER BY application_date DESC, id DESC;"
     }
     
     response = make_request(payload)
