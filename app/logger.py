@@ -30,6 +30,6 @@ def log(operation, user, notes, category):
             # cur.execute("INSERT INTO `Log` (operation, date, notes) VALUES (%s, %s, %s)", (operation, datetime.now(), notes))
             # mysql.connection.commit()
             # cur.close()
-            response = views.make_request_by_query(f"INSERT INTO `log` (operation, date, notes) VALUES (\'{operation}\', \'{datetime.now().strftime('%Y-%m-%d')}\', \'{notes}\')")
+            response = views.make_request_by_query(f"INSERT INTO `log` (operation, date, notes) VALUES (\'{operation}\', \'{datetime.now()}\', \'{notes}\')")
             if not response.ok:
                 raise Exception(response.text)
