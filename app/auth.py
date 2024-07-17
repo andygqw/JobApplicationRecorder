@@ -1,5 +1,5 @@
 from flask import request, redirect, render_template, session, url_for
-from app import app, mysql, bcrypt, views
+from app import app, bcrypt, views
 from app.logger import log
 from datetime import datetime
 
