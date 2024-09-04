@@ -9,6 +9,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 
+import time
+
 # Main route
 @app.route('/')
 def home():
@@ -164,6 +166,7 @@ def quick_add():
     op = "quick_add"
     if session.get('logged_in'):
         try:
+
             userDetails = request.form
             url = userDetails['quickAddUrl']
             headers = {
@@ -303,8 +306,11 @@ def quick_add():
             # cur.execute(s)
             # mysql.connection.commit()
             # cur.close()
+
             response = make_request_by_query(s)
+            
             if response.ok:
+
                 log(op, session['username'], "Quick Add successfully: " + title, True)
                 return redirect(url_for('dashboard'))
             else:
